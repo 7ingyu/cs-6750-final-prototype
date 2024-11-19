@@ -24,6 +24,9 @@ module.exports = {
       { first: "Asako", last: "Yuzuki" },
       { first: "John", last: "Carreyrou" },
       { first: "Toni", last: "Morrison" },
+      {first: "Shanna", last: "Tan"},
+      {first: "Gregory", last: "Rabassa"},
+      {first: "Polly", last: "Barton"}
     ];
 
     await queryInterface.bulkInsert(

@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  async up (queryInterface, Sequelize) {
     /**
      * Add seed commands here.
      *
@@ -11,34 +11,7 @@ module.exports = {
      *   name: 'John Doe',
      *   isBetaMember: false
      * }], {});
-     */
-    const kalika = [
-      "The Last Wish",
-      "None of This is True",
-      "A Court of Frost and Starlight",
-      "Daughter of the Pirate King",
-      "Pretty Girls",
-      "The Gilded Cage",
-      "A Strange Hymn",
-      "A Court of Wings and Ruin",
-      "Butcher & Blackbird",
-      "The Dallergut Dream Department Store",
-      "Divine Rivals",
-      "Lessons in Chemistry",
-      "The Da Vinci Code",
-      "A Court of Mist and Fury",
-      "Mexican Gothic",
-      "Magic Study",
-      "Poison Study",
-      "The Prison Healer",
-      "Uprooted",
-      "Starling House",
-      "Iron Flame",
-      "Fourth Wing",
-      "A Court of Thorns and Roses",
-      "Mad Honey",
-      "My Plain Jane",
-    ];
+    */
 
     const jennifer = [
       "Briefly Perfectly Human: Making an Authentic Life by Getting Real About the End",
@@ -52,29 +25,34 @@ module.exports = {
       "Bad Blood: Secrets and Lies in a Silicon Valley Startup",
       "Beloved (Beloved Trilogy, #1)",
     ];
+    const multi = [
+      "Welcome to the Hyunam-Dong Bookshop",
+      "One Hundred Years of Solitude",
+      "Butter",
+    ];
 
-    await queryInterface.bulkInsert("books", [
+    await queryInterface.bulkInsert("book_author", [
       ...jennifer.map((name, i) => ({
-        name,
+        author: i + 1,
+        book: i + 1,
         createdAt: new Date(),
         updatedAt: new Date(),
       })),
-      ...kalika.map((name) => ({
-        name,
+      ...multi.map((name, i) => ({
+        author: jennifer.length + 1,
+        book: jennifer.indexOf(name) + 1,
         createdAt: new Date(),
         updatedAt: new Date(),
       })),
     ]);
   },
 
-  async down(queryInterface, Sequelize) {
+  async down (queryInterface, Sequelize) {
     /**
      * Add commands to revert seed here.
      *
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-
-    await queryInterface.bulkDelete('books', null, {})
-  },
+  }
 };

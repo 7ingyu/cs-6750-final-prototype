@@ -9,7 +9,7 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
-app.listen(port, () => {
+app.listen(port, async () => {
   try {
     await sequelize.authenticate();
     console.log('DB connected.');
