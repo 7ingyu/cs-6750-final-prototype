@@ -14,7 +14,7 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "migrate": "npx sequelize-cli db:migrate",
+    "migrate": "npx sequelize-cli db:migrate:all",
     "seed": "npx sequelize-cli db:seed:undo:all && npx sequelize-cli db:seed:all",
     "start": "node server.js",
     "dev": "npx nodemon server.js"
