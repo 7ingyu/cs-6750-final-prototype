@@ -3,6 +3,7 @@ const express = require('express');
 const { sequelize, Book, Tag, Author } = require('./models');
 
 const app = express();
+app.use(express.json());
 const port = process.env.PORT || 3000;
 
 app.get('/books', async (req, res) => {
@@ -12,25 +13,38 @@ app.get('/books', async (req, res) => {
       {
         model: Author,
         attributes: ['first', 'last', 'middle'],
+        through: { attributes: [] },
+        as: 'authors',
       },
       {
         model: Tag,
         attributes: ['name'],
+        through: { attributes: [] },
+        as: 'tags',
       },
     ],
   });
-  res.send('Hello World!');
+  res.json(books);
 });
 
 app.get('/tags', async (req, res) => {
-  const tags = await Tag.findAll();
+  const tags = await Tag.findAll({
+    attributes: ['name'],
+    include: [
+      {
+        model: Book,
+        attributes: ['id', 'name'],
+        through: { attributes: [] },
+        as: 'books',
+      },
+    ],
+  });
   res.json(tags);
 });
 
 app.listen(port, async () => {
   try {
     await sequelize.authenticate();
-    await sequelize.sync({ force: true });
     console.log('DB connected.');
   } catch (e) {
     console.log('Unable to connect to db:', e);
