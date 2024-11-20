@@ -20,12 +20,14 @@ function App() {
 
   return (
     <PhoneLayout>
-      <h1>Books</h1>
-      <ul>
-        {books.map((book, i) => (
-          <li key={i}>{book?.name}</li>
-        ))}
-      </ul>
+      <div className="app">
+        <h1>Books</h1>
+        <ul>
+          {books.map((book, i) => (
+            <li key={i}>{book?.name}</li>
+          ))}
+        </ul>
+      </div>
     </PhoneLayout>
   );
 }

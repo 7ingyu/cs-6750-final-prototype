@@ -8,7 +8,7 @@ const PhoneLayout = ({ children }: { children: ReactNode }) => {
           <div className="device-wrapper">
             <div
               className="device"
-              data-device="iPhone5"
+              data-device="iPhone7"
               data-orientation="portrait"
               data-color="black"
             >
