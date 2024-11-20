@@ -75,6 +75,6 @@ module.exports = {
      * await queryInterface.bulkDelete('People', null, {});
      */
 
-    await queryInterface.bulkDelete('books', null, {})
+    await queryInterface.bulkDelete("books", null, {});
   },
 };

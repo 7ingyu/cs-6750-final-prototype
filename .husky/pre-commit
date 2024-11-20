@@ -1,0 +1,1 @@
+npx git-format-staged --formatter "prettier --stdin-filepath {}" "*.scss" "*.tsx" "*.ts" "*.js"

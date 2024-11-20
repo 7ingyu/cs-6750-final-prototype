@@ -10,5 +10,5 @@ const config = {
 
 module.exports = ["development", "test", "production"].reduce(
   (acc, env) => ({ ...acc, [env]: config }),
-  {}
+  {},
 );

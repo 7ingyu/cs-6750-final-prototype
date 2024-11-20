@@ -1,0 +1,29 @@
+{
+  "name": "server",
+  "author": "Ting-Yu Chen",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/7ingyu/cs-6750-final-prototype.git"
+  },
+  "bugs": {
+    "url": "https://github.com/7ingyu/cs-6750-final-prototype/issues"
+  },
+  "homepage": "https://github.com/7ingyu/cs-6750-final-prototype#readme",
+  "description": "",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "prepare": "husky",
+    "setup": "husky init && echo npx git-format-staged --formatter \"prettier --stdin-filepath {}\" \"*.scss\" \"*.tsx\" \"*.ts\" \"*.js\" > .husky/pre-commit",
+    "format": "prettier ./ --write",
+    "precommit": "git-format-staged --formatter \"prettier --stdin-filepath {}\" \"*.scss\" \"*.tsx\" \"*.ts\" \"*.js\"",
+    "start": "cd client && yarn build && cd ../server && yarn start"
+  },
+  "dependencies": {
+    "git-format-staged": "^3.1.1",
+    "husky": "^9.1.7",
+    "prettier": "^3.3.3"
+  }
+}

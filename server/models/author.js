@@ -9,7 +9,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate({ Book, BookAuthor }) {
       // define association here
-      Author.belongsToMany(Book, { through: BookAuthor, otherKey: 'book', foreignKey: 'author'})
+      Author.belongsToMany(Book, {
+        through: BookAuthor,
+        otherKey: "book",
+        foreignKey: "author",
+      });
     }
   }
   Author.init(
@@ -22,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: "Author",
       tableName: "authors",
-    }
+    },
   );
   return Author;
 };

@@ -21,7 +21,7 @@ module.exports = {
         name: tag,
         createdAt: new Date(),
         updatedAt: new Date(),
-      }))
+      })),
     );
   },
 
@@ -33,6 +33,6 @@ module.exports = {
      * await queryInterface.bulkDelete('People', null, {});
      */
 
-    await queryInterface.bulkDelete('tags', null, {});
+    await queryInterface.bulkDelete("tags", null, {});
   },
 };

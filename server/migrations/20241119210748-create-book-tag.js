@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('book_tag', {
+    await queryInterface.createTable("book_tag", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -12,15 +12,15 @@ module.exports = {
       book: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'books',
-          key: 'id',
+          model: "books",
+          key: "id",
         },
       },
       tag: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'tags',
-          key: 'id',
+          model: "tags",
+          key: "id",
         },
       },
       createdAt: {
@@ -30,10 +30,10 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
-      }
+      },
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('book_tag');
-  }
+    await queryInterface.dropTable("book_tag");
+  },
 };
