@@ -1,10 +1,13 @@
 require("dotenv").config();
+const path = require("path");
 const express = require("express");
 const { sequelize, Book, Tag, Author } = require("./models");
 
 const app = express();
 app.use(express.json());
 const port = process.env.PORT || 3000;
+
+app.use(express.static("dist"));
 
 app.get("/api/books", async (req, res) => {
   const books = await Book.findAll({
