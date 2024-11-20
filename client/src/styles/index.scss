@@ -54,4 +54,21 @@
 @import "~/bootstrap-icons/font/bootstrap-icons.css";
 
 // Custom
+@import "~/html5-device-mockups/dist/device-mockups.css";
 @import "./design/index";
+
+.mobile-only {
+  @media screen and (min-width: 769px) {
+    display: none;
+  }
+}
+
+.desktop-only {
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
+}
+
+.screen {
+  overflow: clip;
+}

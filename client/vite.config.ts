@@ -20,6 +20,7 @@ export default defineConfig({
       "@pages": "/src/pages",
       "@utils": "/src/utils",
       "~": "/node_modules",
+      // "/device-mockups": "node_modules/html5-device-mockups"
     },
   },
 });
