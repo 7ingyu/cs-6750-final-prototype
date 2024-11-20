@@ -20,7 +20,7 @@
     "format": "prettier ./ --write",
     "precommit": "git-format-staged --formatter \"prettier --stdin-filepath {}\" \"*.scss\" \"*.tsx\" \"*.ts\" \"*.js\"",
     "build": "cd client && yarn install && yarn build",
-    "start": "cd server && yarn install && yarn start"
+    "start": "cd server && yarn install && yarn setup && yarn start"
   },
   "dependencies": {
     "git-format-staged": "^3.1.1",
