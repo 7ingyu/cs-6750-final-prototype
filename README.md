@@ -4,10 +4,10 @@
 
 ### Team Members
 
-[Chen, Ting-Yu](https://github.com/7ingyu)
-Han, Wendy D
-[Lacy, Kalika](https://github.com/kqlacy)
-[Yee, Jennifer](https://github.com/chocolateleche)
+- [Chen, Ting-Yu](https://github.com/7ingyu)
+- Han, Wendy D
+- [Lacy, Kalika](https://github.com/kqlacy)
+- [Yee, Jennifer](https://github.com/chocolateleche)
 
 ### Prerequisites:
 - [Node v.22.11.0](https://nodejs.org)
@@ -37,5 +37,5 @@ Han, Wendy D
 - `yarn install`
 - `yarn run dev`
 - Open a browser window at the indicated url, usually [https://localhost:5432](https://localhost:5432)
-- Frontend components are in the `src` folder. Try editing `App.tsx` to see changed reflected in the browser.
+- Frontend components are in the `src` folder. Try editing `App.tsx` to see changes reflected in the browser.
   - With hot module reloading, you should not need to refresh your browser window to see changes.
