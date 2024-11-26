@@ -1,16 +1,6 @@
 {
-  "name": "server",
+  "name": "cs-6750-final-prototype-server",
   "author": "Ting-Yu Chen",
-  "license": "ISC",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/7ingyu/cs-6750-final-prototype.git"
-  },
-  "bugs": {
-    "url": "https://github.com/7ingyu/cs-6750-final-prototype/issues"
-  },
-  "homepage": "https://github.com/7ingyu/cs-6750-final-prototype#readme",
-  "description": "",
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
