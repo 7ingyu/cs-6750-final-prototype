@@ -27,6 +27,7 @@
 - For development, you will need two concurrent terminals, one for the server and one for the client
 
 **To start the server for development:**
+- Make a new database that matches the database name in your `.env` file.
 - `cd server`
 - `yarn install`
 - `yarn run setup`
