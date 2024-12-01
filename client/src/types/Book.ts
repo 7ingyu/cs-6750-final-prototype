@@ -1,5 +1,4 @@
-import type { Author } from "./Author";
-import type { Tag } from "./Tag";
+import type { Author, Tag } from "@/types";
 
 export type Book = {
   id?: number;

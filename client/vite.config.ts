@@ -15,12 +15,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": "/src",
-      "@design": "/src/design",
-      "@components": "/src/components",
-      "@pages": "/src/pages",
-      "@utils": "/src/utils",
       "~": "/node_modules",
-      // "/device-mockups": "node_modules/html5-device-mockups"
     },
   },
 });
