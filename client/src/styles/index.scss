@@ -62,6 +62,7 @@
   @include media-breakpoint-up(sm) {
     display: none;
   }
+  height: 100vh;
 }
 
 .desktop-only {
