@@ -1,0 +1,36 @@
+.tag {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  border: none;
+
+  span {
+    @extend .serif;
+    background-color: $secondary;
+    padding: rfs-value(10px);
+    height: rfs-value(30px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: rfs-value(15px);
+
+    &:first-child {
+      border-top-left-radius: rfs-value(5px);
+      border-bottom-left-radius: rfs-value(5px);
+    }
+    &:last-child {
+      width: rfs-value(17px);
+      margin-left: rfs-value(1px);
+      clip-path: polygon(0 0, 60% 0, 100% 20%, 100% 80%, 60% 100%, 0 100%);
+    }
+  }
+  svg {
+    width: rfs-value(18px);
+    height: rfs-value(30px);
+    margin-left: rfs-value(1px);
+    clip-path: polygon(0 0, 60% 0, 100% 20%, 100% 80%, 60% 100%, 0 100%);
+  }
+}
