@@ -92,17 +92,8 @@
     overflow-y: scroll;
     scrollbar-width: none;
 
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-      font-family: "Kadwa", serif;
-    }
-
     .serif {
-      font-family: "Kadwa", serif;
+      font-family: $headings-font-family;
     }
 
     font-size: rfs-value(15px);

@@ -1,0 +1,17 @@
+.float-btn {
+  @extend .btn;
+  @extend .btn-primary;
+  position: fixed;
+  bottom: 22.5vw;
+  right: 20px;
+  z-index: 1000;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  font-weight: bold;
+  // border-width: rfs-value(3px);
+}

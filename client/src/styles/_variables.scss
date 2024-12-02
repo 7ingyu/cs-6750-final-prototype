@@ -1,3 +1,30 @@
+// Fonts
+$headings-font-family: "Kadwa", serif;
+
+// Colors
 $primary: #208d87;
-$secondary: #405a7b;
+$secondary: #5b7ca8;
 $dark: #333;
+
+// Offcanvas
+$offcanvas-bg-color: black;
+$offcanvas-vertical-height: 65vh;
+
+// Forms
+$input-bg: #161a19;
+$input-color: white;
+$input-border-color: $primary;
+$input-focus-border-color: $primary;
+$input-placeholder-color: $primary;
+$input-focus-width: 0.25rem;
+$input-focus-bg: black;
+$input-focus-box-shadow: 0 0 0 0.15rem $primary;
+$input-font-family: $headings-font-family;
+$input-font-size: 0.9375rem;
+
+.form-control {
+  &::placeholder {
+    font-family: sans-serif;
+    font-weight: bold;
+  }
+}

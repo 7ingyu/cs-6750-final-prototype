@@ -31,7 +31,7 @@ const TagEnd = ({ size }: { size: string }) => (
       height="100%"
       mask={`url(#mask-${size})`}
       fill-opacity="1"
-      fill="var(--bs-primary)"
+      fill="var(--bs-secondary)"
     />
     <text
       text-anchor="middle"
