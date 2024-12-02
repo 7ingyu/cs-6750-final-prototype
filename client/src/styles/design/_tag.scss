@@ -33,4 +33,16 @@
     margin-left: rfs-value(1px);
     clip-path: polygon(0 0, 60% 0, 100% 20%, 100% 80%, 60% 100%, 0 100%);
   }
+
+  &.lg {
+    span {
+      height: rfs-value(44px);
+      font-size: rfs-value(22px);
+      padding: rfs-value(18px);
+    }
+    svg {
+      width: rfs-value(22px);
+      height: rfs-value(44px);
+    }
+  }
 }

@@ -12,6 +12,11 @@ const Home = () => {
         {tags?.map(({ name }) => (
           <Tag onClick={() => console.log(name)}>{name}</Tag>
         ))}
+        {tags?.map(({ name }) => (
+          <Tag size="lg" onClick={() => console.log(name)}>
+            {name}
+          </Tag>
+        ))}
       </div>
     </>
   );
