@@ -11,11 +11,11 @@ app.use(express.static("dist"));
 
 app.get("/api/books", async (req, res) => {
   const books = await Book.findAll({
-    attributes: ["name", "description"],
+    attributes: ["id", "name", "description"],
     include: [
       {
         model: Author,
-        attributes: ["first", "last", "middle"],
+        attributes: ["first", "middle", "last"],
         through: { attributes: [] },
         as: "authors",
       },

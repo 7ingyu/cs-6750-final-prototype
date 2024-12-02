@@ -57,6 +57,7 @@
 // Custom
 @import "~/html5-device-mockups/dist/device-mockups.css";
 @import "./design/index";
+@import "./components/index";
 
 .mobile-only {
   @include media-breakpoint-up(sm) {

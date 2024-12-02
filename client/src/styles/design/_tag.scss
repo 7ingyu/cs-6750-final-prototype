@@ -17,19 +17,11 @@
     justify-content: center;
     align-items: center;
     font-size: rfs-value(15px);
-
-    &:first-child {
-      border-top-left-radius: rfs-value(5px);
-      border-bottom-left-radius: rfs-value(5px);
-    }
-    &:last-child {
-      width: rfs-value(17px);
-      margin-left: rfs-value(1px);
-      clip-path: polygon(0 0, 60% 0, 100% 20%, 100% 80%, 60% 100%, 0 100%);
-    }
+    border-top-left-radius: rfs-value(5px);
+    border-bottom-left-radius: rfs-value(5px);
   }
   svg {
-    width: rfs-value(18px);
+    width: rfs-value(15px);
     height: rfs-value(30px);
     margin-left: rfs-value(1px);
     clip-path: polygon(0 0, 60% 0, 100% 20%, 100% 80%, 60% 100%, 0 100%);

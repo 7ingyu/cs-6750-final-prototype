@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
 import { PhoneLayout } from "./design";
 import axios from "axios";
-import { Book, Tag } from "@/types";
+import { Book, Tag as TagType } from "@/types";
 import { Nav } from "@/components";
 import { ThemeContext, TagsContext, BooksContext } from "@/context";
 import { BrowserRouter, Routes, Route } from "react-router";
-import { Home } from "@/pages";
+import { Home, Tag } from "@/pages";
 
 const App = () => {
   const [books, setBooks] = useState<Book[]>([]);
   const [theme, setTheme] = useState("dark");
-  const [tags, setTags] = useState<Tag[]>([
+  const [tags, setTags] = useState<TagType[]>([
     {
       name: "🍰",
       type: "Sampled",
@@ -44,6 +44,11 @@ const App = () => {
       try {
         const { data } = await axios.get("/api/books");
         setBooks(data);
+        setTags(
+          tags.map((tag) =>
+            tag.type === "Borrowed" ? { ...tag, books: data } : tag,
+          ),
+        );
       } catch (_) {
         console.error("Error fetching /api/books");
       }
@@ -57,19 +62,20 @@ const App = () => {
         <BooksContext.Provider value={[books, setBooks]}>
           <PhoneLayout>
             <div className="app">
-              <Nav />
-              <main className="container">
-                <BrowserRouter>
+              <BrowserRouter>
+                <Nav />
+                <main className="container">
                   <Routes>
                     <Route path="/" element={<Home />} />
+                    <Route path="/tag/:id" element={<Tag />} />
                   </Routes>
-                </BrowserRouter>
-              </main>
-              <img
-                src="/bottom_nav.png"
-                alt="bottom navigation"
-                className="w-100"
-              />
+                </main>
+                <img
+                  src="/bottom_nav.png"
+                  alt="bottom navigation"
+                  className="w-100"
+                />
+              </BrowserRouter>
             </div>
           </PhoneLayout>
         </BooksContext.Provider>

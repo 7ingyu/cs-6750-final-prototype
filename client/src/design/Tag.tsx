@@ -7,13 +7,13 @@ type TagProps = {
 };
 
 const TagEnd = ({ size }: { size: string }) => (
-  <svg viewBox="0 0 18 30">
+  <svg viewBox="0 0 22 44">
     <defs>
       <mask id={`mask-${size}`} x="0" y="0" width="100%" height="100%">
         <rect x="0" y="0" width="100%" height="100%" fill="#fff" />
         <text
           textAnchor="middle"
-          fontSize={size === "sm" ? "145%" : "190%"}
+          fontSize="190%"
           fontWeight="bold"
           x="50%"
           y="65%"
@@ -35,7 +35,7 @@ const TagEnd = ({ size }: { size: string }) => (
     />
     <text
       textAnchor="middle"
-      fontSize={size === "sm" ? "145%" : "190%"}
+      fontSize="190%"
       fontWeight="bold"
       x="50%"
       y="65%"

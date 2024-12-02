@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from "react";
-import { format } from "date-fns";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { TagsContext } from "@/context";
 import { FloatBtn, Tag } from "@/design";
+import { Link } from "react-router";
 
 type SortType = "newest" | "oldest" | "recent activity" | "size" | "name";
 type FilterObj = {
@@ -119,34 +119,21 @@ const Home = () => {
           </button>
         </div>
       </div>
-      <div>
-        {tags?.map(({ name, type, createdAt, books }, i) => {
-          let desc = "";
-          switch (type) {
-            case "Sampled":
-              desc = `Titles I've sampled since ${format(createdAt, "dd MMM yyyy")}`;
-              break;
-            case "Borrowed":
-              desc = "Titles I've borrowed in Libby";
-              break;
-          }
-          return (
-            <div role="button" key={i}>
+      <ul className="list-unstyled">
+        {tags?.map(({ name, books }, i) => (
+          <li key={i}>
+            <Link to={`/tag/${i}`} className="text-decoration-none">
               <div className="d-flex justify-content-between">
                 <Tag onClick={() => console.log(name)}>{name}</Tag>
                 <div className="badge text-bg-secondary d-flex align-items-center">
                   {books.length}
                 </div>
               </div>
-              {/* <div className="text-secondary mt-1">
-                <b>{smart ? `Smart Tag: ${type}` : "Regular Tag"}</b>
-              </div>
-              <div>{desc || `Created ${format(createdAt, "dd MMM yyyy")}`}</div> */}
               <hr />
-            </div>
-          );
-        })}
-      </div>
+            </Link>
+          </li>
+        ))}
+      </ul>
       <Offcanvas
         show={showFilter}
         onHide={() => setShowFilter(false)}
