@@ -7,4 +7,5 @@ export type Tag = {
   description?: string;
   books: Book[];
   createdAt: Date;
+  updatedAt: Date;
 };

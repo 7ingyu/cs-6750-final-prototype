@@ -17,6 +17,7 @@ const App = () => {
       smart: true,
       description: "Titles I've sampled",
       createdAt: new Date(),
+      updatedAt: new Date(),
       books: [],
     },
     {
@@ -24,6 +25,7 @@ const App = () => {
       type: "Notify Me",
       smart: true,
       createdAt: new Date(),
+      updatedAt: new Date(),
       books: [],
     },
     {
@@ -31,6 +33,7 @@ const App = () => {
       type: "Borrowed",
       smart: true,
       createdAt: new Date(),
+      updatedAt: new Date(),
       description: "Titles I've borrowed in Libby",
       books: [],
     },
