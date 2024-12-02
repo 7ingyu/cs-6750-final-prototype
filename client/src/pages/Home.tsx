@@ -1,10 +1,12 @@
 import { useContext, useEffect, useState } from "react";
 import { format } from "date-fns";
+import Offcanvas from "react-bootstrap/Offcanvas";
 import { TagsContext } from "@/context";
 import { Tag } from "@/design";
 
+type SortType = "newest" | "oldest" | "recent activity" | "size" | "name";
 type FilterObj = {
-  sortBy: "newest" | "oldest" | "recent" | "size" | "name";
+  sortBy: SortType;
   regular: boolean;
   smart: boolean;
   order: "asc" | "desc";
@@ -13,12 +15,14 @@ type FilterObj = {
 const Home = () => {
   const [allTags, _] = useContext(TagsContext);
   const [filter, setFilter] = useState<FilterObj>({
-    sortBy: "recent",
+    sortBy: "recent activity",
     regular: false,
     smart: false,
     order: "asc",
   });
+  const [count, setCount] = useState(allTags?.length || 0);
   const [tags, setTags] = useState(allTags);
+  const [showFilter, setShowFilter] = useState(false);
 
   useEffect(() => {
     let filteredTags = allTags;
@@ -27,14 +31,42 @@ const Home = () => {
     } else if (!filter.smart && filter.regular) {
       filteredTags = allTags?.filter((t) => !t.smart);
     }
+    filteredTags = filteredTags?.sort((a, b) => {
+      switch (filter.sortBy) {
+        case "newest":
+          return filter.order === "asc"
+            ? a.createdAt.getTime() - b.createdAt.getTime()
+            : b.createdAt.getTime() - a.createdAt.getTime();
+        case "oldest":
+          return filter.order === "asc"
+            ? b.createdAt.getTime() - a.createdAt.getTime()
+            : a.createdAt.getTime() - b.createdAt.getTime();
+        case "size":
+          return filter.order === "asc"
+            ? a.books.length - b.books.length
+            : b.books.length - a.books.length;
+        case "recent activity":
+          return filter.order === "asc"
+            ? a.updatedAt.getTime() - b.updatedAt.getTime()
+            : b.updatedAt.getTime() - a.updatedAt.getTime();
+        case "name":
+          return filter.order === "asc"
+            ? a.name.localeCompare(b.name)
+            : b.name.localeCompare(a.name);
+      }
+    });
     setTags(filteredTags);
+    setCount(filteredTags?.length || 0);
   }, [filter]);
 
   return (
     <>
       <h1>Tags</h1>
       <div className="mt-2 mb-3 d-flex flex-wrap justify-content-between">
-        <button className="btn btn-primary px-2 py-0 btn-lg mb-3">
+        <button
+          className="btn btn-primary px-2 py-0 btn-lg mb-3"
+          onClick={() => setShowFilter(!showFilter)}
+        >
           <i className="bi bi-filter" />
         </button>
         <div>
@@ -86,6 +118,47 @@ const Home = () => {
           );
         })}
       </div>
+      <Offcanvas
+        show={showFilter}
+        onHide={() => setShowFilter(false)}
+        placement={"bottom"}
+      >
+        <Offcanvas.Header>
+          <Offcanvas.Title>
+            <button
+              className="btn btn-primary"
+              onClick={() => setShowFilter(false)}
+            >
+              SHOW {count} RESULTS
+            </button>
+          </Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body>
+          <div>Sort By</div>
+          <div>
+            {["name", "newest", "oldest", "size", "recent activity"].map(
+              (sort) => (
+                <button
+                  className={`btn btn-sm ${filter.sortBy === sort ? "btn-light" : "btn-dark"} serif me-2`}
+                  onClick={() =>
+                    filter.sortBy === sort
+                      ? setFilter({
+                          ...filter,
+                          order: filter.order === "asc" ? "desc" : "asc",
+                        })
+                      : setFilter({ ...filter, sortBy: sort as SortType })
+                  }
+                >
+                  <span>{sort}</span>
+                  <span className="ms-1 small">
+                    <i className="bi bi-arrow-down-up"></i>
+                  </span>
+                </button>
+              ),
+            )}
+          </div>
+        </Offcanvas.Body>
+      </Offcanvas>
     </>
   );
 };
