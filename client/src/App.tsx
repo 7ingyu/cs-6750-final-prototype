@@ -4,6 +4,7 @@ import axios from "axios";
 import { Book, Tag } from "@/types";
 import { Nav } from "@/components";
 import { ThemeContext, TagsContext, BooksContext } from "@/context";
+import { BrowserRouter, Routes, Route } from "react-router";
 import { Home } from "@/pages";
 
 const App = () => {
@@ -40,7 +41,11 @@ const App = () => {
             <div className="app">
               <Nav />
               <main className="container">
-                <Home />
+                <BrowserRouter>
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                  </Routes>
+                </BrowserRouter>
               </main>
               <img
                 src="/bottom_nav.png"
