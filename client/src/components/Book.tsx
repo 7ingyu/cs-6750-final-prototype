@@ -1,6 +1,6 @@
 import { Book as BookType } from "@/types";
 
-const Book = ({ id, name, authors, description, tags }: BookType) => (
+const Book = ({ id, name, authors, description }: BookType) => (
   <li className="book">
     <div>
       <img src={`/books/${id}.jpg`} alt={name} />

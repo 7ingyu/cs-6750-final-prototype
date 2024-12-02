@@ -6,7 +6,7 @@ import { Book } from "@/components";
 
 const Tag = () => {
   const id = useParams().id;
-  const [allTags, setAllTags] = useContext(TagsContext);
+  const [allTags, _] = useContext(TagsContext);
 
   const tag = allTags.find((_, i) => i === Number(id));
 
@@ -17,7 +17,7 @@ const Tag = () => {
       </div>
     );
 
-  const { name, type, smart, description, books, createdAt, updatedAt } = tag;
+  const { name, books } = tag;
 
   return (
     <>
