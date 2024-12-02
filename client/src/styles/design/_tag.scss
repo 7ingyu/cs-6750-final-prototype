@@ -9,7 +9,8 @@
 
   span {
     @extend .serif;
-    background-color: $secondary;
+    background-color: $primary;
+    color: black;
     padding: rfs-value(10px);
     height: rfs-value(30px);
     display: flex;

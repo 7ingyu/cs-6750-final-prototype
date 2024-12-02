@@ -10,7 +10,31 @@ import { Home } from "@/pages";
 const App = () => {
   const [books, setBooks] = useState<Book[]>([]);
   const [theme, setTheme] = useState("dark");
-  const [tags, setTags] = useState<Tag[]>([]);
+  const [tags, setTags] = useState<Tag[]>([
+    {
+      name: "🍰",
+      type: "Sampled",
+      smart: true,
+      description: "Titles I've sampled",
+      createdAt: new Date(),
+      books: [],
+    },
+    {
+      name: "Wishlist",
+      type: "Notify Me",
+      smart: true,
+      createdAt: new Date(),
+      books: [],
+    },
+    {
+      name: "📃",
+      type: "Borrowed",
+      smart: true,
+      createdAt: new Date(),
+      description: "Titles I've borrowed in Libby",
+      books: [],
+    },
+  ]);
 
   useEffect(() => {
     const getBooks = async () => {
@@ -21,16 +45,7 @@ const App = () => {
         console.error("Error fetching /api/books");
       }
     };
-    const getTags = async () => {
-      try {
-        const { data } = await axios.get("/api/tags");
-        setTags(data);
-      } catch (_) {
-        console.error("Error fetching /api/tags");
-      }
-    };
     getBooks();
-    getTags();
   }, []);
 
   return (

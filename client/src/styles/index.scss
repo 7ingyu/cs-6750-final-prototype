@@ -32,7 +32,7 @@
 // @import "~/bootstrap/scss/accordion";
 // @import "~/bootstrap/scss/breadcrumb";
 // @import "~/bootstrap/scss/pagination";
-// @import "~/bootstrap/scss/badge";
+@import "~/bootstrap/scss/badge";
 // @import "~/bootstrap/scss/alert";
 // @import "~/bootstrap/scss/progress";
 // @import "~/bootstrap/scss/list-group";
@@ -103,5 +103,7 @@
     .serif {
       font-family: "Kadwa", serif;
     }
+
+    font-size: rfs-value(15px);
   }
 }
