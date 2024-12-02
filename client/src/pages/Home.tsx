@@ -120,7 +120,7 @@ const Home = () => {
         </div>
       </div>
       <div>
-        {tags?.map(({ name, type, smart, createdAt, books }) => {
+        {tags?.map(({ name, type, createdAt, books }, i) => {
           let desc = "";
           switch (type) {
             case "Sampled":
@@ -131,17 +131,17 @@ const Home = () => {
               break;
           }
           return (
-            <div role="button">
+            <div role="button" key={i}>
               <div className="d-flex justify-content-between">
                 <Tag onClick={() => console.log(name)}>{name}</Tag>
                 <div className="badge text-bg-secondary d-flex align-items-center">
                   {books.length}
                 </div>
               </div>
-              <div className="text-secondary mt-1">
+              {/* <div className="text-secondary mt-1">
                 <b>{smart ? `Smart Tag: ${type}` : "Regular Tag"}</b>
               </div>
-              <div>{desc || `Created ${format(createdAt, "dd MMM yyyy")}`}</div>
+              <div>{desc || `Created ${format(createdAt, "dd MMM yyyy")}`}</div> */}
               <hr />
             </div>
           );
@@ -168,6 +168,7 @@ const Home = () => {
             {["name", "newest", "oldest", "size", "recent activity"].map(
               (sort) => (
                 <button
+                  key={sort}
                   className={`btn btn-sm ${filter.sortBy === sort ? "btn-light" : "btn-dark"} serif me-2`}
                   onClick={() =>
                     filter.sortBy === sort
