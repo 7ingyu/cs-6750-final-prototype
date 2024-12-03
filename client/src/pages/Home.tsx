@@ -77,7 +77,6 @@ const Home = () => {
           description: formData.get("description") as string,
           createdAt: new Date(),
           updatedAt: new Date(),
-          smart: false,
           books: [],
         },
       ]);
@@ -90,50 +89,54 @@ const Home = () => {
 
   return (
     <>
-      <h1>Tags</h1>
-      <div className="mt-2 mb-3 d-flex flex-wrap justify-content-between">
-        <button
-          className="btn btn-primary px-2 py-0 btn-lg mb-3"
-          onClick={() => setShowFilter(!showFilter)}
-        >
-          <i className="bi bi-filter" />
-        </button>
-        <div>
+      <header>
+        <h1>Tags</h1>
+      </header>
+      <main>
+        <div className="mt-2 mb-3 d-flex flex-wrap justify-content-between">
           <button
-            onClick={() => setFilter({ ...filter, smart: !filter.smart })}
-            className={`btn btn-sm ${filter.smart ? "btn-light" : "btn-dark"} serif me-2`}
+            className="btn btn-primary px-2 py-0 btn-lg mb-3"
+            onClick={() => setShowFilter(!showFilter)}
           >
-            <span>smart tag</span>
-            <span className="opacity-50 ms-2">
-              {allTags?.filter((t) => t.smart).length}
-            </span>
+            <i className="bi bi-filter" />
           </button>
-          <button
-            onClick={() => setFilter({ ...filter, regular: !filter.regular })}
-            className={`btn btn-sm ${filter.regular ? "btn-light" : "btn-dark"} serif me-2`}
-          >
-            <span>regular tag</span>
-            <span className="opacity-50 ms-2">
-              {allTags?.filter((t) => !t.smart).length}
-            </span>
-          </button>
+          <div>
+            <button
+              onClick={() => setFilter({ ...filter, smart: !filter.smart })}
+              className={`btn btn-sm ${filter.smart ? "btn-light" : "btn-dark"} serif me-2`}
+            >
+              <span>smart tag</span>
+              <span className="opacity-50 ms-2">
+                {allTags?.filter((t) => t.smart).length}
+              </span>
+            </button>
+            <button
+              onClick={() => setFilter({ ...filter, regular: !filter.regular })}
+              className={`btn btn-sm ${filter.regular ? "btn-light" : "btn-dark"} serif me-2`}
+            >
+              <span>regular tag</span>
+              <span className="opacity-50 ms-2">
+                {allTags?.filter((t) => !t.smart).length}
+              </span>
+            </button>
+          </div>
         </div>
-      </div>
-      <ul className="list-unstyled">
-        {tags?.map(({ name, books }, i) => (
-          <li key={i}>
-            <Link to={`/tag/${i}`} className="text-decoration-none">
-              <div className="d-flex justify-content-between">
-                <Tag onClick={() => console.log(name)}>{name}</Tag>
-                <div className="badge text-bg-secondary d-flex align-items-center">
-                  {books.length}
+        <ul className="list-unstyled">
+          {tags?.map(({ name, books }, i) => (
+            <li key={i}>
+              <Link to={`/tag/${i}`} className="text-decoration-none">
+                <div className="d-flex justify-content-between">
+                  <Tag onClick={() => console.log(name)}>{name}</Tag>
+                  <div className="badge text-bg-secondary d-flex align-items-center">
+                    {books.length}
+                  </div>
                 </div>
-              </div>
-              <hr />
-            </Link>
-          </li>
-        ))}
-      </ul>
+                <hr />
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </main>
       <Offcanvas
         show={showFilter}
         onHide={() => setShowFilter(false)}

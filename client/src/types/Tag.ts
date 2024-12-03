@@ -2,8 +2,8 @@ import { Book } from "@/types";
 
 export type Tag = {
   name: string;
-  type?: "Sampled" | "Notify Me" | "Borrowed";
-  smart: boolean;
+  type?: string;
+  smart?: string;
   description?: string;
   books: Book[];
   createdAt: Date;

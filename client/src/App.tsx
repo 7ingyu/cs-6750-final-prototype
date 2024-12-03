@@ -6,47 +6,52 @@ import { Nav } from "@/components";
 import { ThemeContext, TagsContext, BooksContext } from "@/context";
 import { BrowserRouter, Routes, Route } from "react-router";
 import { Home, Tag } from "@/pages";
+import { format } from "date-fns";
+
+const defaultTags = [
+  {
+    name: "🍰",
+    smart: "Whenever you open a sample, the title will be added to this tag.",
+    type: "Sampled",
+    description: `Titles I've sampled since ${format(new Date(), "dd MMM yyyy")}.`,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    books: [],
+  },
+  {
+    name: "Wishlist",
+    smart:
+      "Receive notification when tagged titles are added at your libraries - including new issues of magazines, and works by the same author.",
+    type: "Notify Me",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    books: [],
+  },
+  {
+    name: "📃",
+    smart: "Every title you borrow is added to this tag.",
+    type: "Borrowed",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    description: "Titles I've borrowed in Libby",
+    books: [],
+  },
+];
 
 const App = () => {
   const [books, setBooks] = useState<Book[]>([]);
   const [theme, setTheme] = useState("dark");
-  const [tags, setTags] = useState<TagType[]>([
-    {
-      name: "🍰",
-      type: "Sampled",
-      smart: true,
-      description: "Titles I've sampled",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      books: [],
-    },
-    {
-      name: "Wishlist",
-      type: "Notify Me",
-      smart: true,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      books: [],
-    },
-    {
-      name: "📃",
-      type: "Borrowed",
-      smart: true,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      description: "Titles I've borrowed in Libby",
-      books: [],
-    },
-  ]);
+  const [tags, setTags] = useState<TagType[]>(defaultTags);
 
   useEffect(() => {
     const getBooks = async () => {
       try {
-        const { data } = await axios.get("/api/books");
-        setBooks(data);
+        const { data: allBooks } = await axios.get("/api/books");
+        allBooks.map((b: Book) => ({ ...b, tags: [defaultTags[2]] }));
+        setBooks(allBooks);
         setTags(
           tags.map((tag) =>
-            tag.type === "Borrowed" ? { ...tag, books: data } : tag,
+            tag.type === "Borrowed" ? { ...tag, books: allBooks } : tag,
           ),
         );
       } catch (_) {
@@ -64,12 +69,12 @@ const App = () => {
             <div className="app">
               <BrowserRouter>
                 <Nav />
-                <main className="container">
+                <div className="container">
                   <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/tag/:id" element={<Tag />} />
                   </Routes>
-                </main>
+                </div>
                 <img
                   src="/bottom_nav.png"
                   alt="bottom navigation"

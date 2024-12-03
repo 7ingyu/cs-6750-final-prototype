@@ -1,7 +1,7 @@
 li.book {
   > div {
     display: grid;
-    grid-template-columns: 40% 60%;
+    grid-template-columns: 30% 70%;
     gap: 0.5rem;
 
     img {
@@ -11,10 +11,15 @@ li.book {
 
     .data {
       display: grid;
-      grid-template-rows: 2rem;
+      grid-template-rows: 1.25rem;
+      font-size: rfs-value(14px);
       .title {
         font-weight: bold;
-        height: 3rem;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+      .authors {
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;

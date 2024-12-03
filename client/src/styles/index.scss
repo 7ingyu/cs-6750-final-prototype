@@ -58,6 +58,7 @@
 @import "~/html5-device-mockups/dist/device-mockups.css";
 @import "./design/index";
 @import "./components/index";
+@import "./pages/index";
 
 .mobile-only {
   @include media-breakpoint-up(sm) {
@@ -88,7 +89,7 @@
   grid-template-columns: 1fr;
   grid-template-rows: auto 1fr auto;
 
-  main {
+  .container {
     // flex-shrink: ;
     overflow-y: scroll;
     scrollbar-width: none;
@@ -98,5 +99,9 @@
     }
 
     font-size: rfs-value(15px);
+  }
+
+  main {
+    padding-bottom: 4rem;
   }
 }
