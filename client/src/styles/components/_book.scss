@@ -1,5 +1,5 @@
 li.book {
-  > div {
+  > * {
     display: grid;
     grid-template-columns: 30% 70%;
     gap: 0.5rem;

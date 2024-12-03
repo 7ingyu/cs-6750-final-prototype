@@ -1,0 +1,42 @@
+.book-pg {
+  position: relative;
+  overflow: visible;
+
+  .bg {
+    position: absolute;
+    top: 0;
+    left: -10vw;
+    height: 50vh;
+    width: 120vw;
+    background-color: $secondary;
+    opacity: 0.5;
+    z-index: 0;
+  }
+
+  header {
+    position: relative;
+    z-index: 10;
+
+    .authors {
+      text-transform: capitalize;
+      font-size: rfs-value(12px);
+      margin-bottom: 0.5rem;
+    }
+
+    .title {
+      font-size: rfs-value(18px);
+      margin-bottom: 1rem;
+    }
+
+    img {
+      height: 15rem;
+      width: 100%;
+      object-fit: contain;
+      object-position: left;
+      filter: drop-shadow(0.5rem 0.5rem 0 $secondary);
+    }
+  }
+
+  main {
+  }
+}

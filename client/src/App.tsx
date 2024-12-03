@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { PhoneLayout } from "./design";
 import axios from "axios";
-import { Book, Tag as TagType } from "@/types";
+import type { Book as BookType, Tag as TagType } from "@/types";
 import { Nav } from "@/components";
 import { ThemeContext, TagsContext, BooksContext } from "@/context";
 import { BrowserRouter, Routes, Route } from "react-router";
-import { Home, Tag } from "@/pages";
+import { Home, Tag, Book } from "@/pages";
 import { format } from "date-fns";
 
 const defaultTags = [
@@ -39,7 +39,7 @@ const defaultTags = [
 ];
 
 const App = () => {
-  const [books, setBooks] = useState<Book[]>([]);
+  const [books, setBooks] = useState<BookType[]>([]);
   const [theme, setTheme] = useState("dark");
   const [tags, setTags] = useState<TagType[]>(defaultTags);
 
@@ -47,8 +47,9 @@ const App = () => {
     const getBooks = async () => {
       try {
         const { data: allBooks } = await axios.get("/api/books");
-        allBooks.map((b: Book) => ({ ...b, tags: [defaultTags[2]] }));
-        setBooks(allBooks);
+        setBooks(
+          allBooks.map((b: BookType) => ({ ...b, tags: [defaultTags[2]] })),
+        );
         setTags(
           tags.map((tag) =>
             tag.type === "Borrowed" ? { ...tag, books: allBooks } : tag,
@@ -73,6 +74,7 @@ const App = () => {
                   <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/tag/:id" element={<Tag />} />
+                    <Route path="/book/:id" element={<Book />} />
                   </Routes>
                 </div>
                 <img
