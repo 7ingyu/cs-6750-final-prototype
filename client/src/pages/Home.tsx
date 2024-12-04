@@ -159,8 +159,8 @@ const Home = () => {
           <div>Sort By</div>
           <ul className="list-unstyled d-flex flex-wrap gap-2">
             {["name", "newest", "oldest", "size", "recent activity"].map(
-              (sort) => (
-                <li>
+              (sort, i) => (
+                <li key={i}>
                   <button
                     key={sort}
                     className={`btn btn-sm ${filter.sortBy === sort ? "btn-light" : "btn-dark"} serif`}
