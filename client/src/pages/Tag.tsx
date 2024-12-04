@@ -2,39 +2,44 @@ import { useContext, useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router";
 import { format } from "date-fns";
 import { Offcanvas, Modal } from "react-bootstrap";
+import {
+  LeadingActions,
+  SwipeableList,
+  SwipeableListItem,
+  SwipeAction,
+  TrailingActions,
+} from "react-swipeable-list";
 import { BooksContext, TagsContext, HistoryContext } from "@/context";
 import { Book, FloatBtn, Tag as TagComponent } from "@/components";
 
-import type { Tag as TagType } from "@/types";
+import type { Book as BookType, Tag as TagType } from "@/types";
 
 const Tag = () => {
   const id = useParams().id;
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const [_, setHistory] = useContext(HistoryContext);
-  const [allBooks] = useContext(BooksContext);
+  const [allBooks, setAllBooks] = useContext(BooksContext);
   const [allTags, setAllTags] = useContext(TagsContext);
   const [showEdit, setShowEdit] = useState(false);
   const [showDuplicateError, setShowDuplicateError] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
 
-  const [{ name, books, smart, description, createdAt }, setTag] =
-    useState<TagType>({
-      name: "",
-      books: [],
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    });
+  const [{ name, smart, description, createdAt }, setTag] = useState<TagType>({
+    name: "",
+    books: [],
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  });
+  const [books, setBooks] = useState<BookType[]>([]);
 
   useEffect(() => {
     const tagData = allTags.find((_, i) => i === Number(id));
     if (tagData) {
-      setTag({
-        ...tagData,
-        books: allBooks.filter((b) => b.tags.includes(tagData.name)),
-      });
+      setTag(tagData);
+      setBooks(allBooks.filter((b) => b.tags.includes(tagData.name)));
     }
-  }, [allTags, id]);
+  }, [allTags, id, allBooks]);
 
   useEffect(() => {
     if (!name) return;
@@ -85,6 +90,30 @@ const Tag = () => {
     navigate("/");
   };
 
+  const removeBook = (book: BookType) => {
+    setAllBooks(
+      allBooks.map((b) =>
+        b.id === book.id ? { ...b, tags: b.tags.filter((t) => t !== name) } : b,
+      ),
+    );
+  };
+
+  const action = (book: BookType) => (
+    <SwipeAction onClick={() => removeBook(book)}>
+      <div className="bg-danger text-white d-flex justify-content-center align-items-center fs-1">
+        <i className="bi bi-trash3-fill" />
+      </div>
+    </SwipeAction>
+  );
+
+  const leadingActions = (book: BookType) => (
+    <LeadingActions>{action(book)}</LeadingActions>
+  );
+
+  const trailingActions = (book: BookType) => (
+    <TrailingActions>{action(book)}</TrailingActions>
+  );
+
   return (
     <div className="tag-pg">
       <header className="mb-3">
@@ -102,14 +131,20 @@ const Tag = () => {
           </div>
         ) : null}
       </header>
-      <hr />
+      <hr className="mb-0 pb-0" />
       <main>
         {books.length ? (
-          <ul className="list-unstyled">
+          <SwipeableList>
             {books.map((book, i) => (
-              <Book key={i} {...book} />
+              <SwipeableListItem
+                leadingActions={leadingActions(book)}
+                trailingActions={trailingActions(book)}
+                key={i}
+              >
+                <Book {...book} />
+              </SwipeableListItem>
             ))}
-          </ul>
+          </SwipeableList>
         ) : (
           <em>No books with this tag.</em>
         )}

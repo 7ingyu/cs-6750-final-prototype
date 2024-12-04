@@ -20,7 +20,6 @@ const Book = ({ id, name, authors, description }: BookType) => (
         <div className="description">{description}</div>
       </div>
     </Link>
-    <hr />
   </li>
 );
 
