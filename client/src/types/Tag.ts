@@ -8,4 +8,5 @@ export type Tag = {
   books: Book[];
   createdAt: Date;
   updatedAt: Date;
+  size: number;
 };

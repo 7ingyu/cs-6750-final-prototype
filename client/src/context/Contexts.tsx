@@ -24,6 +24,7 @@ const defaultTags = [
     createdAt: new Date(),
     updatedAt: new Date(),
     books: [],
+    size: 0,
   },
   {
     name: "Wishlist",
@@ -33,6 +34,7 @@ const defaultTags = [
     createdAt: new Date(),
     updatedAt: new Date(),
     books: [],
+    size: 0,
   },
   {
     name: "📃",
@@ -42,10 +44,11 @@ const defaultTags = [
     updatedAt: new Date(),
     description: "Titles I've borrowed in Libby",
     books: [],
+    size: 0,
   },
 ];
 
-const Context = ({ children }: { children: ReactNode }) => {
+const Contexts = ({ children }: { children: ReactNode }) => {
   const [books, setBooks] = useState<BookType[]>([]);
   const [history, setHistory] = useState<HistoryType[]>([
     { pathname: "/", title: "Tags" },
@@ -62,6 +65,11 @@ const Context = ({ children }: { children: ReactNode }) => {
             ...b,
             tags: [defaultTags[2].name],
           })),
+        );
+        setTags(
+          defaultTags.map((t) =>
+            t.type === "Borrowed" ? { ...t, size: allBooks.length } : t,
+          ),
         );
       } catch (_) {
         console.error("Error fetching /api/books");
@@ -83,8 +91,4 @@ const Context = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export default Context;
-export { default as ThemeContext } from "./ThemeContext";
-export { default as TagsContext } from "./TagsContext";
-export { default as BooksContext } from "./BooksContext";
-export { default as HistoryContext } from "./HistoryContext";
+export default Contexts;

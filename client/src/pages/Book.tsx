@@ -9,15 +9,10 @@ import type { Book as BookType } from "@/types";
 const Book = () => {
   const id = useParams().id;
   const { pathname } = useLocation();
-  // const navigate = useNavigate();
-  // const [allTags, setAllTags] = useContext(TagsContext);
-  const [allTags] = useContext(TagsContext);
+  const [allTags, setAllTags] = useContext(TagsContext);
   const [allBooks, setAllBooks] = useContext(BooksContext);
   const [_, setHistory] = useContext(HistoryContext);
   const [showTagger, setShowTagger] = useState(false);
-
-  // const [showDuplicateError, setShowDuplicateError] = useState(false);
-  // const [showConfirmation, setShowConfirmation] = useState(false);
 
   const [{ name, authors, tags }, setBook] = useState<BookType>({
     id: Number(id),
@@ -50,12 +45,24 @@ const Book = () => {
   }, [tags]);
 
   const toggleTag = (tagName: string) => {
+    const includes = tags.includes(tagName);
     setBook((prev) => ({
       ...prev,
-      tags: prev.tags.includes(tagName)
+      tags: includes
         ? prev.tags.filter((t) => t !== tagName)
         : [...prev.tags, tagName],
     }));
+    setAllTags((prev) =>
+      prev.map((t) =>
+        t.name === tagName
+          ? {
+              ...t,
+              size: includes ? t.size - 1 : t.size + 1,
+              updatedAt: new Date(),
+            }
+          : t,
+      ),
+    );
   };
 
   if (!name) {

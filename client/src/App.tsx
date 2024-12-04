@@ -1,11 +1,11 @@
 import { BrowserRouter, Routes, Route } from "react-router";
 import { Nav, PhoneLayout } from "@/components";
-import Context from "@/context";
+import { Contexts } from "@/context";
 import { Home, Tag, Book } from "@/pages";
 
 const App = () => {
   return (
-    <Context>
+    <Contexts>
       <PhoneLayout>
         <div className="app">
           <BrowserRouter>
@@ -25,7 +25,7 @@ const App = () => {
           </BrowserRouter>
         </div>
       </PhoneLayout>
-    </Context>
+    </Contexts>
   );
 };
 

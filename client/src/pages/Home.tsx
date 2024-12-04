@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { Offcanvas } from "react-bootstrap";
 import { Link } from "react-router";
-import { TagsContext, BooksContext } from "@/context";
+import { TagsContext } from "@/context";
 import { FloatBtn, Tag } from "@/components";
 
 type SortType = "newest" | "oldest" | "recent activity" | "size" | "name";
@@ -13,7 +13,6 @@ type FilterObj = {
 };
 
 const Home = () => {
-  const [allBooks] = useContext(BooksContext);
   const [allTags, setAllTags] = useContext(TagsContext);
   const [filter, setFilter] = useState<FilterObj>({
     sortBy: "recent activity",
@@ -49,9 +48,7 @@ const Home = () => {
             ? b.createdAt.getTime() - a.createdAt.getTime()
             : a.createdAt.getTime() - b.createdAt.getTime();
         case "size":
-          return filter.order === "asc"
-            ? a.books.length - b.books.length
-            : b.books.length - a.books.length;
+          return filter.order === "asc" ? a.size - b.size : b.size - a.size;
         case "recent activity":
           return filter.order === "asc"
             ? a.updatedAt.getTime() - b.updatedAt.getTime()
@@ -83,6 +80,7 @@ const Home = () => {
           createdAt: new Date(),
           updatedAt: new Date(),
           books: [],
+          size: 0,
         },
       ]);
       setShowAdd(false);
@@ -127,22 +125,19 @@ const Home = () => {
           </div>
         </div>
         <ul className="list-unstyled">
-          {tags?.map(({ name }, i) => {
-            const books = allBooks?.filter((b) => b.tags.includes(name));
-            return (
-              <li key={i}>
-                <Link to={`/tag/${i}`} className="text-decoration-none">
-                  <div className="d-flex justify-content-between">
-                    <Tag onClick={() => console.log(name)}>{name}</Tag>
-                    <div className="badge text-bg-secondary d-flex align-items-center">
-                      {books.length}
-                    </div>
+          {tags?.map(({ name, size }, i) => (
+            <li key={i}>
+              <Link to={`/tag/${i}`} className="text-decoration-none">
+                <div className="d-flex justify-content-between">
+                  <Tag>{name}</Tag>
+                  <div className="badge text-bg-secondary d-flex align-items-center">
+                    {size}
                   </div>
-                  <hr />
-                </Link>
-              </li>
-            );
-          })}
+                </div>
+                <hr />
+              </Link>
+            </li>
+          ))}
         </ul>
       </main>
       <Offcanvas
@@ -180,7 +175,9 @@ const Home = () => {
                   >
                     <span className="me-1">{sort}</span>
                     <span className="small">
-                      <i className="bi bi-arrow-down-up" />
+                      <i
+                        className={`bi bi-arrow-${filter.order === "asc" ? "up" : "down"}`}
+                      />
                     </span>
                   </button>
                 </li>

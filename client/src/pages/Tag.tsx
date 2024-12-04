@@ -30,6 +30,7 @@ const Tag = () => {
     books: [],
     createdAt: new Date(),
     updatedAt: new Date(),
+    size: 0,
   });
   const [books, setBooks] = useState<BookType[]>([]);
 
