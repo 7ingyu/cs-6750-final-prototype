@@ -82,10 +82,12 @@ const Book = () => {
         <div>
           {tags?.length ? (
             <ul className="tags">
-              {tags.map((t, i) => (
+              {tags.map((tagName, i) => (
                 <li key={i}>
-                  <Link to={`/tag/${i}`}>
-                    <Tag>{t}</Tag>
+                  <Link
+                    to={`/tag/${allTags.findIndex((t) => t.name === tagName)}`}
+                  >
+                    <Tag>{tagName}</Tag>
                   </Link>
                 </li>
               ))}
