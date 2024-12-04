@@ -3,32 +3,53 @@ li.book {
   border-bottom: 1px rgba(222, 226, 230, 0.25) solid;
   padding-top: 1rem;
   padding-bottom: 1rem;
+  color: $primary;
 
   > * {
-    display: grid;
-    grid-template-columns: 30% 70%;
+    display: flex;
     gap: 0.5rem;
+    &.selected {
+      color: white;
+    }
 
-    img {
-      width: 100%;
-      height: auto;
+    div {
+      flex-grow: 0;
+      width: 30%;
+      img {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+      }
     }
 
     .data {
+      width: 100%;
+      flex-shrink: 1;
       display: grid;
+      grid-template-columns: 100%;
       grid-template-rows: 1.25rem;
       font-size: rfs-value(14px);
       .title {
+        width: 100%;
         font-weight: bold;
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
       }
       .authors {
+        width: 100%;
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
       }
+    }
+
+    input[type="checkbox"] {
+      flex-grow: 0;
+      flex-shrink: 0;
+      width: 1rem;
+      height: 1rem;
+      align-self: center;
     }
   }
 }

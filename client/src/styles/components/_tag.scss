@@ -6,6 +6,7 @@
   padding: 0;
   margin: 0;
   border: none;
+  max-width: 100%;
 
   span {
     @extend .serif;
@@ -19,6 +20,16 @@
     border-bottom-left-radius: rfs-value(5px);
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
+    max-width: calc(100% - rfs-value(15px));
+
+    * {
+      display: inline;
+      border: none;
+      background: transparent;
+      padding: 0;
+      margin: 0;
+      font-size: rfs-value(15px);
+    }
   }
   svg {
     width: rfs-value(15px);
@@ -29,9 +40,14 @@
 
   &.lg {
     span {
+      max-width: calc(100% - rfs-value(22px));
       height: rfs-value(44px);
       font-size: rfs-value(22px);
       padding: rfs-value(18px);
+
+      * {
+        font-size: rfs-value(22px);
+      }
     }
     svg {
       width: rfs-value(22px);

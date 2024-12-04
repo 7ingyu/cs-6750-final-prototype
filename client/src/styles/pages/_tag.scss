@@ -1,8 +1,54 @@
 .tag-pg {
   font-size: rfs-value(14px);
 
+  header {
+    .duplicate-warning {
+      font-size: rfs-value(11px);
+      height: 0.5rem;
+      color: $danger;
+      margin-top: 0.125rem;
+    }
+  }
+
   .smart-desc {
     font-size: rfs-value(13px);
     line-height: 1;
+  }
+
+  .tag input,
+  input {
+    @extend .form-control;
+    margin: 0 -0.25rem;
+    padding: 0 0.25rem;
+    font-size: unset;
+    font-family: unset;
+
+    &:disabled {
+      background: none;
+      border-color: transparent;
+    }
+  }
+
+  .edit-bar {
+    position: fixed;
+    bottom: 22.5vw;
+    right: rfs-value(20px);
+    z-index: 1000;
+    filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.2));
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    flex-direction: row-reverse;
+    gap: 0.5rem;
+
+    button {
+      border-radius: 50%;
+      width: rfs-value(50px);
+      height: rfs-value(50px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+    }
   }
 }

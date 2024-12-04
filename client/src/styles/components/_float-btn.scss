@@ -1,13 +1,12 @@
 .float-btn {
   @extend .btn;
-  @extend .btn-primary;
   position: fixed;
   bottom: 22.5vw;
-  right: 20px;
+  right: rfs-value(20px);
   z-index: 1000;
   border-radius: 50%;
-  width: 50px;
-  height: 50px;
+  width: rfs-value(50px);
+  height: rfs-value(50px);
   display: flex;
   justify-content: center;
   align-items: center;

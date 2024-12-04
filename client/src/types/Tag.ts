@@ -5,7 +5,7 @@ export type Tag = {
   type?: string;
   smart?: string;
   description?: string;
-  books: Book[];
+  books?: Book[];
   createdAt: Date;
   updatedAt: Date;
   size: number;

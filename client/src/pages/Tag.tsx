@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router";
-import { format } from "date-fns";
+import { format, set } from "date-fns";
 import { Offcanvas, Modal, Spinner } from "react-bootstrap";
 import {
   LeadingActions,
@@ -27,23 +27,34 @@ const Tag = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
   const [filters, setFilters] = useState<{ [key: string]: boolean }>({});
+  const [showTagger, setShowTagger] = useState(false);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
-  const [{ name, smart, description, createdAt }, setTag] = useState<TagType>({
-    name: "",
-    books: [],
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    size: 0,
-  });
+  const [{ name, smart, description, createdAt, size }, setTag] =
+    useState<TagType>({
+      name: "",
+      books: [],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      size: 0,
+    });
   const [books, setBooks] = useState<BookType[]>([]);
+  const [selectedBooks, setSelected] = useState<{ [key: number]: boolean }>({});
 
   useEffect(() => {
-    const tagData = allTags.find((_, i) => i === Number(id));
+    if (id === undefined) return;
+    const tagData = allTags[Number(id)];
     if (tagData) {
       setTag(tagData);
       const rBooks = allBooks.filter((b) => b.tags.includes(tagData.name));
       setRelevantBooks(rBooks);
       setBooks(rBooks);
+      setSelected(
+        rBooks.reduce(
+          (acc, b) => ({ ...acc, [b.id]: selectedBooks[b.id] ?? false }),
+          {},
+        ),
+      );
       setFilters(
         [...new Set(rBooks.map((b) => b.tags).flat())].reduce(
           (acc, t) => ({ ...acc, [t]: t === tagData.name ? true : false }),
@@ -64,10 +75,23 @@ const Tag = () => {
   }, [name]);
 
   useEffect(() => {
+    const tagsList = allTags.map((t) => t.name);
+    allBooks
+      .filter((b) => selectedBooks[b.id])
+      .forEach((b) => {
+        tagsList.forEach((t, i) => {
+          if (!b.tags.includes(t)) {
+            tagsList.splice(i, 1);
+          }
+        });
+      });
+    setSelectedTags(tagsList);
+  }, [selectedBooks, allBooks]);
+
+  useEffect(() => {
     const relevantTags = Object.entries(filters)
       .filter(([, v]) => v)
       .map(([k]) => k);
-    console.log(relevantTags);
     setBooks(
       relevantBooks.filter((b) =>
         relevantTags.every((t) => b.tags.includes(t)),
@@ -75,7 +99,7 @@ const Tag = () => {
     );
   }, [filters]);
 
-  if (!name) {
+  if (id === undefined || !allTags[Number(id)]) {
     return (
       <div className="h-100 w-100 d-flex justify-content-center align-items-center">
         <Spinner animation="border" role="status">
@@ -85,71 +109,82 @@ const Tag = () => {
     );
   }
 
-  const handleEdit = (e: React.FormEvent<HTMLFormElement>) => {
-    setShowDuplicateError(false);
-    e.preventDefault();
-    document
-      .querySelectorAll(".needs-validation")
-      .forEach((form) => form.classList.add("was-validated"));
-    const formData = new FormData(e.currentTarget);
-    const name = formData.get("name") as string;
-    const description = formData.get("description") as string;
-    const isDuplicate = allTags?.find((t) => t.name === name);
-    if (name && !isDuplicate) {
-      setAllTags(
-        allTags.map((t, i) =>
-          String(i) === id
-            ? { ...t, name, description, updatedAt: new Date() }
-            : t,
-        ),
-      );
-      setShowEdit(false);
-    }
-    if (isDuplicate) {
-      setShowDuplicateError(true);
-    }
-  };
-
   const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setAllTags(allTags.filter((_, i) => String(i) !== id));
     navigate("/");
   };
 
-  const removeBook = (book: BookType) => {
-    setAllBooks(
-      allBooks.map((b) =>
-        b.id === book.id ? { ...b, tags: b.tags.filter((t) => t !== name) } : b,
-      ),
-    );
+  // const removeBook = (book: BookType) => {
+  //   setAllBooks(
+  //     allBooks.map((b) =>
+  //       b.id === book.id ? { ...b, tags: b.tags.filter((t) => t !== name) } : b
+  //     )
+  //   );
+  // };
+
+  const handleSave = () => {
+    if (allTags.find((t) => t.name === name)) {
+      setShowDuplicateError(true);
+      return;
+    }
+    setShowEdit(false);
   };
 
-  const action = (book: BookType) => (
-    <SwipeAction onClick={() => removeBook(book)}>
-      <div className="bg-danger text-white d-flex justify-content-center align-items-center fs-1">
-        <i className="bi bi-trash3-fill" />
-      </div>
-    </SwipeAction>
-  );
-
-  const leadingActions = (book: BookType) => (
-    <LeadingActions>{action(book)}</LeadingActions>
-  );
-
-  const trailingActions = (book: BookType) => (
-    <TrailingActions>{action(book)}</TrailingActions>
-  );
+  const toggleTag = (tagName: string) => {
+    const includes = selectedTags.includes(tagName);
+    const taggedBooks: { [key: number]: BookType } = allBooks
+      .filter((b) => selectedBooks[b.id])
+      .map((b) => ({
+        ...b,
+        tags: includes
+          ? b.tags.filter((t) => t !== tagName)
+          : [...b.tags, tagName],
+      }))
+      .reduce((acc, b) => ({ ...acc, [b.id]: b }), {});
+    setAllBooks((prev) => prev.map((b) => taggedBooks[b.id] || b));
+  };
 
   return (
     <div className="tag-pg">
       <header className="mb-3">
         <div>
           <TagComponent size="lg">
-            <h1 className="fs-3 p-0 m-0">{name}</h1>
+            {showEdit ? (
+              <input
+                style={{ width: `${name.length * 0.75 + 0.5}rem` }}
+                value={name}
+                onChange={(e) =>
+                  setTag({
+                    name: e.target.value,
+                    smart,
+                    description,
+                    createdAt,
+                    size,
+                    updatedAt: new Date(),
+                  })
+                }
+              />
+            ) : (
+              <h1>{name}</h1>
+            )}
           </TagComponent>
+          <div className="duplicate-warning">
+            {allTags
+              .filter((_, i) => i !== Number(id))
+              .map((t) => t.name)
+              .includes(name)
+              ? "Tag already exists"
+              : ""}
+          </div>
         </div>
         <div className="description mt-3 mb-2">
-          {description || `Created on ${format(createdAt, "dd MMM yyyy")}`}
+          <input
+            value={
+              description || `Created on ${format(createdAt, "dd MMM yyyy")}`
+            }
+            disabled={!showEdit}
+          />
         </div>
         {smart ? (
           <div className="smart-desc">
@@ -179,130 +214,137 @@ const Tag = () => {
         </div>
         <hr className="mb-0 pb-0" />
         {books.length ? (
-          <SwipeableList>
-            {books.map((book, i) => (
-              <SwipeableListItem
-                leadingActions={leadingActions(book)}
-                trailingActions={trailingActions(book)}
-                key={i}
-              >
-                <Book {...book} />
-              </SwipeableListItem>
-            ))}
-          </SwipeableList>
+          books.map((book, i) => (
+            <Book
+              key={i}
+              {...book}
+              checked={selectedBooks[book.id]}
+              onClick={
+                showEdit
+                  ? () =>
+                      setSelected({
+                        ...selectedBooks,
+                        [book.id]: !selectedBooks[book.id],
+                      })
+                  : undefined
+              }
+            />
+          ))
         ) : (
           <em>No books with this tag.</em>
         )}
+      </main>
+      {showEdit ? (
+        <div className="edit-bar">
+          <button
+            className="btn btn-primary"
+            onClick={handleSave}
+            disabled={allTags
+              .filter((_, i) => i !== Number(id))
+              .map((t) => t.name)
+              .includes(name)}
+          >
+            <i className="bi bi-check-lg" />
+          </button>
+          <button
+            className="btn btn-secondary"
+            disabled={Object.values(selectedBooks).every((v) => !v)}
+            onClick={() => setShowTagger(true)}
+          >
+            <i className="bi bi-tag-fill" />
+          </button>
+          <button
+            className="btn btn-danger"
+            disabled={Object.values(selectedBooks).every((v) => !v)}
+            onClick={() => setShowConfirmation(true)}
+          >
+            <i className="bi bi-trash3-fill" />
+          </button>
+        </div>
+      ) : (
         <FloatBtn onClick={() => setShowEdit(true)}>
           <i className="bi bi-pencil-fill" />
         </FloatBtn>
-        <Offcanvas
-          show={showEdit}
-          onHide={() => setShowEdit(false)}
-          placement={"bottom"}
-        >
-          <Offcanvas.Header closeButton>
-            <Offcanvas.Title>EDIT TAG</Offcanvas.Title>
-          </Offcanvas.Header>
-          <Offcanvas.Body>
-            <form onSubmit={handleEdit} noValidate className="needs-validation">
-              <div className="has-validation">
-                <input
-                  className="form-control"
-                  type="text"
-                  name="name"
-                  placeholder="NAME OF TAG..."
-                  required
-                />
-                <div className="invalid-feedback">
-                  Please enter a name for your new tag.
-                </div>
-              </div>
-              <hr />
-              <div>
-                <input
-                  className="form-control"
-                  type="text"
-                  name="description"
-                  placeholder="DESCRIPTION..."
-                />
-              </div>
-              <div className="small">
-                Optionally, add a description for your tag.
-              </div>
-              <hr />
-              <div className="d-flex justify-content-between">
-                <button
-                  className="btn btn-danger"
-                  onClick={() => setShowConfirmation(true)}
+      )}
+      <Modal
+        show={showConfirmation}
+        onHide={() => setShowConfirmation(false)}
+        centered
+      >
+        <Modal.Body>
+          Are you sure your want to remove the selected books from your {name}{" "}
+          tag?
+        </Modal.Body>
+        <Modal.Footer>
+          <button
+            className="btn btn-light"
+            onClick={() => setShowConfirmation(false)}
+          >
+            CANCEL
+          </button>
+          <button className="btn btn-danger" onClick={handleDelete}>
+            DELETE
+          </button>
+        </Modal.Footer>
+      </Modal>
+      <Offcanvas
+        show={showTagger}
+        onHide={() => setShowTagger(false)}
+        placement={"bottom"}
+      >
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title>TAG BOOK</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body>
+          <ul className="tags">
+            {allTags.map((t, i) => (
+              <li key={i} className="d-inline">
+                <TagComponent
+                  onClick={() => toggleTag(t.name)}
+                  color={selectedTags?.includes(t.name) ? "secondary" : "dark"}
                 >
-                  <i className="bi bi-trash3-fill" />
-                </button>
-                <button className="btn btn-light">SAVE TAG</button>
-              </div>
-              <div className="small text-danger">
-                {showDuplicateError && "Tag already exists."}
-              </div>
-            </form>
-          </Offcanvas.Body>
-        </Offcanvas>
-        <Modal
-          show={showConfirmation}
-          onHide={() => setShowConfirmation(false)}
-          centered
-        >
-          <Modal.Body>
-            Are you sure your want to delete your {name} tag? This cannot be
-            undone.
-          </Modal.Body>
-          <Modal.Footer>
+                  {t.name}
+                </TagComponent>
+              </li>
+            ))}
+          </ul>
+        </Offcanvas.Body>
+      </Offcanvas>
+      <Offcanvas
+        show={showFilter}
+        onHide={() => setShowFilter(false)}
+        placement={"bottom"}
+      >
+        <Offcanvas.Header>
+          <Offcanvas.Title>
             <button
-              className="btn btn-light"
-              onClick={() => setShowConfirmation(false)}
+              className="btn btn-primary"
+              onClick={() => setShowFilter(false)}
             >
-              CANCEL
+              SHOW {books.length} RESULTS
             </button>
-            <button className="btn btn-danger" onClick={handleDelete}>
-              DELETE
-            </button>
-          </Modal.Footer>
-        </Modal>
-        <Offcanvas
-          show={showFilter}
-          onHide={() => setShowFilter(false)}
-          placement={"bottom"}
-        >
-          <Offcanvas.Header>
-            <Offcanvas.Title>
-              <button
-                className="btn btn-primary"
-                onClick={() => setShowFilter(false)}
-              >
-                SHOW {books.length} RESULTS
-              </button>
-            </Offcanvas.Title>
-          </Offcanvas.Header>
-          <Offcanvas.Body>
-            {/* <div className="mb-2">Display Books with  Tags:</div> */}
-            <ul className="list-unstyled d-flex flex-wrap gap-2">
-              {[...new Set(allBooks.map((b) => b.tags).flat())].map((t, i) => (
-                <li key={i}>
-                  <TagComponent
-                    color={filters[t] ? "primary" : "dark"}
-                    onClick={
-                      t !== name
-                        ? () => setFilters({ ...filters, [t]: !filters[t] })
-                        : () => {}
-                    }
-                  >
-                    {t}
-                  </TagComponent>
-                </li>
-              ))}
-            </ul>
-          </Offcanvas.Body>
-        </Offcanvas>
-      </main>
+          </Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body>
+          {/* <div className="mb-2">Display Books with  Tags:</div> */}
+          <ul className="list-unstyled d-flex flex-wrap gap-2">
+            {[...new Set(allBooks.map((b) => b.tags).flat())].map((t, i) => (
+              <li key={i}>
+                <TagComponent
+                  color={filters[t] ? "primary" : "dark"}
+                  onClick={
+                    t !== name
+                      ? () => setFilters({ ...filters, [t]: !filters[t] })
+                      : () => {}
+                  }
+                >
+                  {t}
+                </TagComponent>
+              </li>
+            ))}
+          </ul>
+        </Offcanvas.Body>
+      </Offcanvas>
     </div>
   );
 };
