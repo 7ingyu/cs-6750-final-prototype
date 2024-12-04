@@ -9,7 +9,7 @@ import type { Book as BookType } from "@/types";
 const Book = () => {
   const id = useParams().id;
   const { pathname } = useLocation();
-  const [allTags, setAllTags] = useContext(TagsContext);
+  const [allTags] = useContext(TagsContext);
   const [allBooks, setAllBooks] = useContext(BooksContext);
   const [_, setHistory] = useContext(HistoryContext);
   const [showTagger, setShowTagger] = useState(false);

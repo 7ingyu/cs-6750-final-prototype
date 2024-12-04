@@ -1,14 +1,7 @@
 import { useContext, useState, useEffect } from "react";
-import { useParams, useNavigate, useLocation } from "react-router";
-import { format, set } from "date-fns";
+import { useParams, useLocation } from "react-router";
+import { format } from "date-fns";
 import { Offcanvas, Modal, Spinner } from "react-bootstrap";
-import {
-  LeadingActions,
-  SwipeableList,
-  SwipeableListItem,
-  SwipeAction,
-  TrailingActions,
-} from "react-swipeable-list";
 import { BooksContext, TagsContext, HistoryContext } from "@/context";
 import { Book, FloatBtn, Tag as TagComponent } from "@/components";
 
@@ -17,13 +10,11 @@ import type { Book as BookType, Tag as TagType } from "@/types";
 const Tag = () => {
   const id = useParams().id;
   const { pathname } = useLocation();
-  const navigate = useNavigate();
   const [_, setHistory] = useContext(HistoryContext);
   const [allBooks, setAllBooks] = useContext(BooksContext);
   const [relevantBooks, setRelevantBooks] = useState<BookType[]>([]);
-  const [allTags, setAllTags] = useContext(TagsContext);
+  const [allTags] = useContext(TagsContext);
   const [showEdit, setShowEdit] = useState(false);
-  const [showDuplicateError, setShowDuplicateError] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
   const [filters, setFilters] = useState<{ [key: string]: boolean }>({});
@@ -39,7 +30,9 @@ const Tag = () => {
       size: 0,
     });
   const [books, setBooks] = useState<BookType[]>([]);
-  const [selectedBooks, setSelected] = useState<{ [key: number]: boolean }>({});
+  const [selectedBooks, setSelectedBooks] = useState<{
+    [key: number]: boolean;
+  }>({});
 
   useEffect(() => {
     if (id === undefined) return;
@@ -49,9 +42,9 @@ const Tag = () => {
       const rBooks = allBooks.filter((b) => b.tags.includes(tagData.name));
       setRelevantBooks(rBooks);
       setBooks(rBooks);
-      setSelected(
+      setSelectedBooks((prev) =>
         rBooks.reduce(
-          (acc, b) => ({ ...acc, [b.id]: selectedBooks[b.id] ?? false }),
+          (acc, b) => ({ ...acc, [b.id]: prev[b.id] ?? false }),
           {},
         ),
       );
@@ -99,33 +92,20 @@ const Tag = () => {
     );
   }, [filters]);
 
-  if (id === undefined || !allTags[Number(id)]) {
-    return (
-      <div className="h-100 w-100 d-flex justify-content-center align-items-center">
-        <Spinner animation="border" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </Spinner>
-      </div>
+  const handleDelete = () => {
+    setSelectedBooks({});
+    setAllBooks((prev) =>
+      prev.map((b) =>
+        selectedBooks[b.id]
+          ? { ...b, tags: b.tags.filter((t) => t !== name) }
+          : b,
+      ),
     );
-  }
-
-  const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setAllTags(allTags.filter((_, i) => String(i) !== id));
-    navigate("/");
+    setShowConfirmation(false);
   };
-
-  // const removeBook = (book: BookType) => {
-  //   setAllBooks(
-  //     allBooks.map((b) =>
-  //       b.id === book.id ? { ...b, tags: b.tags.filter((t) => t !== name) } : b
-  //     )
-  //   );
-  // };
 
   const handleSave = () => {
     if (allTags.find((t) => t.name === name)) {
-      setShowDuplicateError(true);
       return;
     }
     setShowEdit(false);
@@ -144,6 +124,16 @@ const Tag = () => {
       .reduce((acc, b) => ({ ...acc, [b.id]: b }), {});
     setAllBooks((prev) => prev.map((b) => taggedBooks[b.id] || b));
   };
+
+  if (id === undefined || !allTags[Number(id)]) {
+    return (
+      <div className="h-100 w-100 d-flex justify-content-center align-items-center">
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      </div>
+    );
+  }
 
   return (
     <div className="tag-pg">
@@ -222,7 +212,7 @@ const Tag = () => {
               onClick={
                 showEdit
                   ? () =>
-                      setSelected({
+                      setSelectedBooks({
                         ...selectedBooks,
                         [book.id]: !selectedBooks[book.id],
                       })
@@ -283,7 +273,7 @@ const Tag = () => {
             CANCEL
           </button>
           <button className="btn btn-danger" onClick={handleDelete}>
-            DELETE
+            REMOVE FROM TAG
           </button>
         </Modal.Footer>
       </Modal>
