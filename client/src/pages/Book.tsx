@@ -52,17 +52,6 @@ const Book = () => {
         ? prev.tags.filter((t) => t !== tagName)
         : [...prev.tags, tagName],
     }));
-    setAllTags((prev) =>
-      prev.map((t) =>
-        t.name === tagName
-          ? {
-              ...t,
-              size: includes ? t.size - 1 : t.size + 1,
-              updatedAt: new Date(),
-            }
-          : t,
-      ),
-    );
   };
 
   if (!name) {

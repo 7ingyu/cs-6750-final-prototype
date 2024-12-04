@@ -57,6 +57,28 @@ const Contexts = ({ children }: { children: ReactNode }) => {
   const [tags, setTags] = useState<TagType[]>(defaultTags);
 
   useEffect(() => {
+    const tagsObj = tags.reduce(
+      (acc, tag) => {
+        acc[tag.name] = 0;
+        return acc;
+      },
+      {} as { [key: string]: number },
+    );
+    books.forEach((b) => {
+      b.tags.forEach((t) => {
+        tagsObj[t]++;
+      });
+    });
+    setTags((prev) =>
+      prev.map((t) => ({
+        ...t,
+        updatedAt: t.size !== tagsObj[t.name] ? new Date() : t.updatedAt,
+        size: tagsObj[t.name],
+      })),
+    );
+  }, [books]);
+
+  useEffect(() => {
     const getBooks = async () => {
       try {
         const { data: allBooks } = await axios.get("/api/books");
