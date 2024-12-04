@@ -24,6 +24,8 @@ const Tag = () => {
   const [showEdit, setShowEdit] = useState(false);
   const [showDuplicateError, setShowDuplicateError] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [showFilter, setShowFilter] = useState(false);
+  const [filters, setFilters] = useState<{ [key: string]: boolean }>({});
 
   const [{ name, smart, description, createdAt }, setTag] = useState<TagType>({
     name: "",
@@ -39,6 +41,12 @@ const Tag = () => {
     if (tagData) {
       setTag(tagData);
       setBooks(allBooks.filter((b) => b.tags.includes(tagData.name)));
+      setFilters(
+        [...new Set(allBooks.map((b) => b.tags).flat())].reduce(
+          (acc, t) => ({ ...acc, [t]: t === tagData.name ? true : false }),
+          {},
+        ),
+      );
     }
   }, [allTags, id, allBooks]);
 
@@ -51,6 +59,15 @@ const Tag = () => {
         : [...prev, { pathname, title: document.title }],
     );
   }, [name]);
+
+  useEffect(() => {
+    const relevantTags = Object.entries(filters)
+      .filter(([, v]) => v)
+      .map(([k]) => k);
+    setBooks(
+      allBooks.filter((b) => relevantTags.every((t) => b.tags.includes(t))),
+    );
+  }, [filters]);
 
   if (!name) {
     return (
@@ -132,8 +149,27 @@ const Tag = () => {
           </div>
         ) : null}
       </header>
-      <hr className="mb-0 pb-0" />
+      <hr />
       <main>
+        <div
+          onClick={() => setShowFilter(!showFilter)}
+          role="button"
+          className="d-flex gap-2 align-items-center"
+        >
+          <span className="btn btn-primary px-2 py-0 btn-lg">
+            <i className="bi bi-filter" />
+          </span>
+          <ul className="list-unstyled p-0 m-0 d-flex gap-2">
+            {Object.entries(filters)
+              .filter(([k, v]) => v && k !== name)
+              .map(([k], i) => (
+                <li key={i}>
+                  <TagComponent color="primary">{k}</TagComponent>
+                </li>
+              ))}
+          </ul>
+        </div>
+        <hr className="mb-0 pb-0" />
         {books.length ? (
           <SwipeableList>
             {books.map((book, i) => (
@@ -223,6 +259,41 @@ const Tag = () => {
             </button>
           </Modal.Footer>
         </Modal>
+        <Offcanvas
+          show={showFilter}
+          onHide={() => setShowFilter(false)}
+          placement={"bottom"}
+        >
+          <Offcanvas.Header>
+            <Offcanvas.Title>
+              <button
+                className="btn btn-primary"
+                onClick={() => setShowFilter(false)}
+              >
+                SHOW {books.length} RESULTS
+              </button>
+            </Offcanvas.Title>
+          </Offcanvas.Header>
+          <Offcanvas.Body>
+            {/* <div className="mb-2">Display Books with  Tags:</div> */}
+            <ul className="list-unstyled d-flex flex-wrap gap-2">
+              {[...new Set(allBooks.map((b) => b.tags).flat())].map((t, i) => (
+                <li key={i}>
+                  <TagComponent
+                    color={filters[t] ? "primary" : "dark"}
+                    onClick={
+                      t !== name
+                        ? () => setFilters({ ...filters, [t]: !filters[t] })
+                        : () => {}
+                    }
+                  >
+                    {t}
+                  </TagComponent>
+                </li>
+              ))}
+            </ul>
+          </Offcanvas.Body>
+        </Offcanvas>
       </main>
     </div>
   );
