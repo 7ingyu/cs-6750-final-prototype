@@ -162,29 +162,31 @@ const Home = () => {
         </Offcanvas.Header>
         <Offcanvas.Body>
           <div>Sort By</div>
-          <div>
+          <ul className="list-unstyled d-flex flex-wrap gap-2">
             {["name", "newest", "oldest", "size", "recent activity"].map(
               (sort) => (
-                <button
-                  key={sort}
-                  className={`btn btn-sm ${filter.sortBy === sort ? "btn-light" : "btn-dark"} serif me-2`}
-                  onClick={() =>
-                    filter.sortBy === sort
-                      ? setFilter({
-                          ...filter,
-                          order: filter.order === "asc" ? "desc" : "asc",
-                        })
-                      : setFilter({ ...filter, sortBy: sort as SortType })
-                  }
-                >
-                  <span>{sort}</span>
-                  <span className="ms-1 small">
-                    <i className="bi bi-arrow-down-up" />
-                  </span>
-                </button>
+                <li>
+                  <button
+                    key={sort}
+                    className={`btn btn-sm ${filter.sortBy === sort ? "btn-light" : "btn-dark"} serif`}
+                    onClick={() =>
+                      filter.sortBy === sort
+                        ? setFilter({
+                            ...filter,
+                            order: filter.order === "asc" ? "desc" : "asc",
+                          })
+                        : setFilter({ ...filter, sortBy: sort as SortType })
+                    }
+                  >
+                    <span className="me-1">{sort}</span>
+                    <span className="small">
+                      <i className="bi bi-arrow-down-up" />
+                    </span>
+                  </button>
+                </li>
               ),
             )}
-          </div>
+          </ul>
         </Offcanvas.Body>
       </Offcanvas>
       <FloatBtn onClick={() => setShowAdd(true)}>
