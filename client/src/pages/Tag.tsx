@@ -1,10 +1,11 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
 import { TagsContext } from "@/context";
 import { FloatBtn, Tag as TagComponent } from "@/design";
 import { Book } from "@/components";
 import { format } from "date-fns";
 import { Offcanvas, Modal } from "react-bootstrap";
+import type { Tag as TagType } from "@/types";
 
 const Tag = () => {
   const id = useParams().id;
@@ -14,16 +15,30 @@ const Tag = () => {
   const [showDuplicateError, setShowDuplicateError] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
 
-  const tag = allTags.find((_, i) => i === Number(id));
+  const [{ name, books, smart, description, createdAt }, setBook] =
+    useState<TagType>({
+      name: "",
+      books: [],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
 
-  if (!tag)
+  useEffect(() => {
+    const tagData = allTags.find((_, i) => i === Number(id));
+    if (tagData) setBook(tagData);
+  }, [allTags, id]);
+
+  useEffect(() => {
+    document.title = name;
+  }, [name]);
+
+  if (!name) {
     return (
       <div>
         <h1>Tag not found</h1>
       </div>
     );
-
-  const { name, books, smart, description, createdAt } = tag;
+  }
 
   const handleEdit = (e: React.FormEvent<HTMLFormElement>) => {
     setShowDuplicateError(false);

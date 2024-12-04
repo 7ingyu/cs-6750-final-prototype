@@ -1,7 +1,8 @@
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { useParams, Link } from "react-router";
 import { BooksContext } from "@/context";
 import { Tag } from "@/design";
+import type { Book as BookType } from "@/types";
 // import { format } from "date-fns";
 // import { Offcanvas, Modal } from "react-bootstrap";
 
@@ -9,21 +10,33 @@ const Book = () => {
   const id = useParams().id;
   // const navigate = useNavigate();
   // const [allTags, setAllTags] = useContext(TagsContext);
-  const [allBooks, _] = useContext(BooksContext);
+  const [allBooks] = useContext(BooksContext);
   // const [showEdit, setShowEdit] = useState(false);
   // const [showDuplicateError, setShowDuplicateError] = useState(false);
   // const [showConfirmation, setShowConfirmation] = useState(false);
 
-  const book = allBooks.find((_, i) => i === Number(id));
+  const [{ name, authors, tags }, setBook] = useState<BookType>({
+    name: "",
+    authors: [],
+    tags: [],
+  });
 
-  if (!book)
+  useEffect(() => {
+    const bookData = allBooks.find((_, i) => i === Number(id));
+    if (bookData) setBook(bookData);
+  }, [allBooks, id]);
+
+  useEffect(() => {
+    document.title = name;
+  }, [name]);
+
+  if (!name) {
     return (
       <div>
         <h1>Tag not found</h1>
       </div>
     );
-
-  const { name, authors, tags } = book;
+  }
 
   return (
     <div className="book-pg">
