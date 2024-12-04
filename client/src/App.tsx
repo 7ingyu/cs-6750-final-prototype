@@ -1,21 +1,21 @@
 import { useEffect, useState } from "react";
-import { PhoneLayout } from "./design";
 import axios from "axios";
-import type {
-  Book as BookType,
-  Tag as TagType,
-  History as HistoryType,
-} from "@/types";
-import { Nav } from "@/components";
+import { BrowserRouter, Routes, Route } from "react-router";
+import { Nav, PhoneLayout } from "@/components";
 import {
   ThemeContext,
   TagsContext,
   BooksContext,
   HistoryContext,
 } from "@/context";
-import { BrowserRouter, Routes, Route } from "react-router";
 import { Home, Tag, Book } from "@/pages";
 import { format } from "date-fns";
+
+import type {
+  Book as BookType,
+  Tag as TagType,
+  History as HistoryType,
+} from "@/types";
 
 const defaultTags = [
   {

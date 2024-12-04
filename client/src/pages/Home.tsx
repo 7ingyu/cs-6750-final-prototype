@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from "react";
-import Offcanvas from "react-bootstrap/Offcanvas";
-import { TagsContext } from "@/context";
-import { FloatBtn, Tag } from "@/design";
+import { Offcanvas } from "react-bootstrap";
 import { Link } from "react-router";
+import { TagsContext } from "@/context";
+import { FloatBtn, Tag } from "@/components";
 
 type SortType = "newest" | "oldest" | "recent activity" | "size" | "name";
 type FilterObj = {

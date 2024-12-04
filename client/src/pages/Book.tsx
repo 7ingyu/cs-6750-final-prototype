@@ -1,7 +1,8 @@
 import { useContext, useState, useEffect } from "react";
 import { useParams, Link, useLocation } from "react-router";
 import { BooksContext, HistoryContext } from "@/context";
-import { Tag } from "@/design";
+import { Tag, FloatBtn } from "@/components";
+
 import type { Book as BookType } from "@/types";
 // import { format } from "date-fns";
 // import { Offcanvas, Modal } from "react-bootstrap";
@@ -72,6 +73,9 @@ const Book = () => {
             <em>No tags</em>
           )}
         </div>
+        <FloatBtn onClick={() => {}}>
+          <i className="bi bi-pencil-fill" />
+        </FloatBtn>
       </main>
     </div>
   );

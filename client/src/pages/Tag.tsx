@@ -1,10 +1,10 @@
 import { useContext, useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router";
-import { TagsContext, HistoryContext } from "@/context";
-import { FloatBtn, Tag as TagComponent } from "@/design";
-import { Book } from "@/components";
 import { format } from "date-fns";
 import { Offcanvas, Modal } from "react-bootstrap";
+import { TagsContext, HistoryContext } from "@/context";
+import { Book, FloatBtn, Tag as TagComponent } from "@/components";
+
 import type { Tag as TagType } from "@/types";
 
 const Tag = () => {
