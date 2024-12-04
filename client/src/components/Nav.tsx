@@ -1,12 +1,11 @@
 import { useContext } from "react";
 import { Link, useLocation } from "react-router";
-// import { Offcanvas } from "react-bootstrap";
+import { Dropdown } from "react-bootstrap";
 import { HistoryContext } from "@/context";
 
 const Nav = () => {
   const { pathname } = useLocation();
   const [history, setHistory] = useContext(HistoryContext);
-  // const [show, setShow] = useState(false);
 
   return (
     <nav className="">
@@ -22,22 +21,33 @@ const Nav = () => {
             <span>{history[history.length - 2].title}</span>
           </Link>
         ) : null}
-        {/* <button
-          className="ms-auto btn btn-link btn-lg p-1"
-          onClick={handleClick}
-        >
-          <i className="bi bi-list"></i>
-        </button> */}
+        {pathname.match(/^\/tag\//) ? (
+          <Dropdown className="ms-auto">
+            <Dropdown.Toggle variant="link">
+              <i className="bi bi-list"></i>
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item href="#">
+                <div>Export List</div>
+                <div>(not yet implemented)</div>
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        ) : null}
+        {pathname === "/" ? (
+          <Dropdown className="ms-auto">
+            <Dropdown.Toggle variant="link">
+              <i className="bi bi-list"></i>
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item href="#">
+                <div>Synchronize Shelf</div>
+                <div>(not yet implemented)</div>
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        ) : null}
       </div>
-      {/* <Offcanvas show={show} onHide={() => setShow(false)}>
-        <Offcanvas.Body>
-          <ul className="list-unstyled">
-            <li>
-              Export Tag
-            </li>
-          </ul>
-        </Offcanvas.Body>
-      </Offcanvas> */}
     </nav>
   );
 };

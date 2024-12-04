@@ -30,3 +30,8 @@ $input-font-size: 0.9375rem;
     font-weight: bold;
   }
 }
+
+// Dropdown
+.app .dropdown-toggle::after {
+  display: none;
+}
