@@ -40,3 +40,19 @@
 - Open a browser window at the indicated url, usually [https://localhost:5432](https://localhost:5432)
 - Frontend components are in the `src` folder. Try editing `App.tsx` to see changes reflected in the browser.
   - With hot module reloading, you should not need to refresh your browser window to see changes.
+
+### Features
+- Tag creation
+- Tag deletion
+- Tag name and description edits
+- Adding multiple tags to a single book
+- Removing multiple books from a single tag
+- Adding multiple tags to multiple books
+- Filtering of tags by type
+- Sorting of tags by name, age, size, and recent activity
+- Filtering of books within tags to only display books with selected multiple tags
+
+### Future Implementations
+- Subtags
+- Mass adding/deleting of tags
+- Nested tree-style tagging system
