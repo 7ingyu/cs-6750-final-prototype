@@ -1,9 +1,18 @@
 import { useEffect, useState } from "react";
 import { PhoneLayout } from "./design";
 import axios from "axios";
-import type { Book as BookType, Tag as TagType } from "@/types";
+import type {
+  Book as BookType,
+  Tag as TagType,
+  History as HistoryType,
+} from "@/types";
 import { Nav } from "@/components";
-import { ThemeContext, TagsContext, BooksContext } from "@/context";
+import {
+  ThemeContext,
+  TagsContext,
+  BooksContext,
+  HistoryContext,
+} from "@/context";
 import { BrowserRouter, Routes, Route } from "react-router";
 import { Home, Tag, Book } from "@/pages";
 import { format } from "date-fns";
@@ -40,6 +49,9 @@ const defaultTags = [
 
 const App = () => {
   const [books, setBooks] = useState<BookType[]>([]);
+  const [history, setHistory] = useState<HistoryType[]>([
+    { pathname: "/", title: "Tags" },
+  ]);
   const [theme, setTheme] = useState("dark");
   const [tags, setTags] = useState<TagType[]>(defaultTags);
 
@@ -64,29 +76,31 @@ const App = () => {
 
   return (
     <ThemeContext.Provider value={[theme, setTheme]}>
-      <TagsContext.Provider value={[tags, setTags]}>
-        <BooksContext.Provider value={[books, setBooks]}>
-          <PhoneLayout>
-            <div className="app">
-              <BrowserRouter>
-                <Nav />
-                <div className="container">
-                  <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/tag/:id" element={<Tag />} />
-                    <Route path="/book/:id" element={<Book />} />
-                  </Routes>
-                </div>
-                <img
-                  src="/bottom_nav.png"
-                  alt="bottom navigation"
-                  className="w-100"
-                />
-              </BrowserRouter>
-            </div>
-          </PhoneLayout>
-        </BooksContext.Provider>
-      </TagsContext.Provider>
+      <HistoryContext.Provider value={[history, setHistory]}>
+        <TagsContext.Provider value={[tags, setTags]}>
+          <BooksContext.Provider value={[books, setBooks]}>
+            <PhoneLayout>
+              <div className="app">
+                <BrowserRouter>
+                  <Nav />
+                  <div className="container">
+                    <Routes>
+                      <Route path="/" element={<Home />} />
+                      <Route path="/tag/:id" element={<Tag />} />
+                      <Route path="/book/:id" element={<Book />} />
+                    </Routes>
+                  </div>
+                  <img
+                    src="/bottom_nav.png"
+                    alt="bottom navigation"
+                    className="w-100"
+                  />
+                </BrowserRouter>
+              </div>
+            </PhoneLayout>
+          </BooksContext.Provider>
+        </TagsContext.Provider>
+      </HistoryContext.Provider>
     </ThemeContext.Provider>
   );
 };

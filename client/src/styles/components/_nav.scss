@@ -11,11 +11,12 @@ nav {
     opacity: 0.5;
     z-index: 0;
   }
+
   .nav {
     position: relative;
     z-index: 10;
     display: flex;
-    justify-content: space-between;
+    justify-content: end;
     align-items: center;
     padding: 1rem;
   }

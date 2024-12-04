@@ -27,6 +27,10 @@ const Home = () => {
   const [showDuplicateError, setShowDuplicateError] = useState(false);
 
   useEffect(() => {
+    document.title = "Tags";
+  }, []);
+
+  useEffect(() => {
     let filteredTags = allTags;
     if (filter.smart && !filter.regular) {
       filteredTags = allTags?.filter((t) => t.smart);

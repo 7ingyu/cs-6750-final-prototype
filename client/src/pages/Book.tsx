@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from "react";
-import { useParams, Link } from "react-router";
-import { BooksContext } from "@/context";
+import { useParams, Link, useLocation } from "react-router";
+import { BooksContext, HistoryContext } from "@/context";
 import { Tag } from "@/design";
 import type { Book as BookType } from "@/types";
 // import { format } from "date-fns";
@@ -8,9 +8,11 @@ import type { Book as BookType } from "@/types";
 
 const Book = () => {
   const id = useParams().id;
+  const { pathname } = useLocation();
   // const navigate = useNavigate();
   // const [allTags, setAllTags] = useContext(TagsContext);
   const [allBooks] = useContext(BooksContext);
+  const [_, setHistory] = useContext(HistoryContext);
   // const [showEdit, setShowEdit] = useState(false);
   // const [showDuplicateError, setShowDuplicateError] = useState(false);
   // const [showConfirmation, setShowConfirmation] = useState(false);
@@ -27,21 +29,27 @@ const Book = () => {
   }, [allBooks, id]);
 
   useEffect(() => {
+    if (!name) return;
     document.title = name;
+    setHistory((prev) =>
+      prev[prev.length - 1].pathname === pathname
+        ? prev
+        : [...prev, { pathname, title: document.title }],
+    );
   }, [name]);
 
   if (!name) {
     return (
       <div>
-        <h1>Tag not found</h1>
+        <h1>Book not found</h1>
       </div>
     );
   }
 
   return (
     <div className="book-pg">
-      <div className="bg" />
       <header className="mb-3">
+        <div className="bg" />
         <div className="authors">
           {authors?.map(({ first, last }) => `${first} ${last}`).join(", ")}
         </div>

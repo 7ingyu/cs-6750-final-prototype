@@ -1,21 +1,18 @@
 .book-pg {
-  position: relative;
-  overflow: visible;
-
-  .bg {
-    position: absolute;
-    top: 0;
-    left: -10vw;
-    height: 50vh;
-    width: 120vw;
-    background-color: $secondary;
-    opacity: 0.5;
-    z-index: 0;
-  }
-
   header {
     position: relative;
     z-index: 10;
+
+    .bg {
+      position: absolute;
+      top: 0;
+      left: -10vw;
+      height: 80%;
+      width: 120vw;
+      background-color: $secondary;
+      opacity: 0.5;
+      z-index: 0;
+    }
 
     .authors {
       text-transform: capitalize;

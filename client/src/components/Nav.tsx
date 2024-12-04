@@ -1,24 +1,26 @@
-import { NavLink } from "react-router";
-import { useLocation } from "react-router";
+import { useContext } from "react";
+import { Link, useLocation } from "react-router";
+import { HistoryContext } from "@/context";
 
 const Nav = () => {
   const handleClick = () => {};
   const { pathname } = useLocation();
+  const [history, setHistory] = useContext(HistoryContext);
 
   return (
     <nav className="">
       <div className={`bg ${pathname.match(/^\/book\//) ? "" : "d-none"}`} />
       <div className="nav">
-        <NavLink
-          to="/"
-          className={({ isActive, isPending, isTransitioning }) =>
-            [
-              isPending ? "pending" : "",
-              isActive ? "d-none" : "",
-              isTransitioning ? "transitioning" : "",
-            ].join(" ")
-          }
-        >{`< Tags`}</NavLink>
+        {history.length > 1 && pathname !== "/" ? (
+          <Link
+            to={history[history.length - 2].pathname}
+            onClick={() => setHistory([...history.slice(0, -1)])}
+            className="text-decoration-none"
+          >
+            <i className="bi bi-chevron-left" />
+            <span>{history[history.length - 2].title}</span>
+          </Link>
+        ) : null}
         <button
           className="ms-auto btn btn-link btn-lg p-1"
           onClick={handleClick}

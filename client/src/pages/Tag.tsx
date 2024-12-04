@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router";
-import { TagsContext } from "@/context";
+import { useParams, useNavigate, useLocation } from "react-router";
+import { TagsContext, HistoryContext } from "@/context";
 import { FloatBtn, Tag as TagComponent } from "@/design";
 import { Book } from "@/components";
 import { format } from "date-fns";
@@ -9,7 +9,9 @@ import type { Tag as TagType } from "@/types";
 
 const Tag = () => {
   const id = useParams().id;
+  const { pathname } = useLocation();
   const navigate = useNavigate();
+  const [_, setHistory] = useContext(HistoryContext);
   const [allTags, setAllTags] = useContext(TagsContext);
   const [showEdit, setShowEdit] = useState(false);
   const [showDuplicateError, setShowDuplicateError] = useState(false);
@@ -29,7 +31,13 @@ const Tag = () => {
   }, [allTags, id]);
 
   useEffect(() => {
+    if (!name) return;
     document.title = name;
+    setHistory((prev) =>
+      prev[prev.length - 1].pathname === pathname
+        ? prev
+        : [...prev, { pathname, title: document.title }],
+    );
   }, [name]);
 
   if (!name) {
