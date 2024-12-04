@@ -20,6 +20,7 @@ const Tag = () => {
   const navigate = useNavigate();
   const [_, setHistory] = useContext(HistoryContext);
   const [allBooks, setAllBooks] = useContext(BooksContext);
+  const [relevantBooks, setRelevantBooks] = useState<BookType[]>([]);
   const [allTags, setAllTags] = useContext(TagsContext);
   const [showEdit, setShowEdit] = useState(false);
   const [showDuplicateError, setShowDuplicateError] = useState(false);
@@ -40,9 +41,11 @@ const Tag = () => {
     const tagData = allTags.find((_, i) => i === Number(id));
     if (tagData) {
       setTag(tagData);
-      setBooks(allBooks.filter((b) => b.tags.includes(tagData.name)));
+      const rBooks = allBooks.filter((b) => b.tags.includes(tagData.name));
+      setRelevantBooks(rBooks);
+      setBooks(rBooks);
       setFilters(
-        [...new Set(allBooks.map((b) => b.tags).flat())].reduce(
+        [...new Set(rBooks.map((b) => b.tags).flat())].reduce(
           (acc, t) => ({ ...acc, [t]: t === tagData.name ? true : false }),
           {},
         ),
@@ -64,8 +67,11 @@ const Tag = () => {
     const relevantTags = Object.entries(filters)
       .filter(([, v]) => v)
       .map(([k]) => k);
+    console.log(relevantTags);
     setBooks(
-      allBooks.filter((b) => relevantTags.every((t) => b.tags.includes(t))),
+      relevantBooks.filter((b) =>
+        relevantTags.every((t) => b.tags.includes(t)),
+      ),
     );
   }, [filters]);
 
