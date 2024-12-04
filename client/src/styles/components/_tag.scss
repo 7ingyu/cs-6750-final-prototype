@@ -9,8 +9,6 @@
 
   span {
     @extend .serif;
-    background-color: $secondary;
-    color: black;
     padding: rfs-value(10px);
     height: rfs-value(30px);
     display: flex;
@@ -19,6 +17,8 @@
     font-size: rfs-value(15px);
     border-top-left-radius: rfs-value(5px);
     border-bottom-left-radius: rfs-value(5px);
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
   }
   svg {
     width: rfs-value(15px);

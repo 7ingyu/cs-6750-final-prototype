@@ -4,9 +4,18 @@ type TagProps = {
   size?: "sm" | "lg";
   children: ReactNode;
   onClick?: undefined | ((event: React.MouseEvent<HTMLButtonElement>) => void);
+  color?:
+    | "primary"
+    | "secondary"
+    | "success"
+    | "danger"
+    | "warning"
+    | "info"
+    | "light"
+    | "dark";
 };
 
-const TagEnd = ({ size }: { size: string }) => (
+const TagEnd = ({ size, color }: { size: string; color: string }) => (
   <svg viewBox="0 0 22 44">
     <defs>
       <mask id={`mask-${size}`} x="0" y="0" width="100%" height="100%">
@@ -31,7 +40,7 @@ const TagEnd = ({ size }: { size: string }) => (
       height="100%"
       mask={`url(#mask-${size})`}
       fillOpacity="1"
-      fill="var(--bs-secondary)"
+      fill={`var(--bs-${color})`}
     />
     <text
       textAnchor="middle"
@@ -51,16 +60,25 @@ const TagEnd = ({ size }: { size: string }) => (
   </svg>
 );
 
-const Tag = ({ size = "sm", children, onClick }: TagProps) => {
-  return onClick ? (
-    <button className={`tag ${size}`} onClick={onClick}>
-      <span>{children}</span>
-      <TagEnd size={size} />
+const TagContent = ({
+  size = "sm",
+  children,
+  color = "secondary",
+}: TagProps) => (
+  <>
+    <span className={`btn btn-${color}`}>{children}</span>
+    <TagEnd size={size} color={color} />
+  </>
+);
+
+const Tag = (props: TagProps) => {
+  return props.onClick ? (
+    <button className={`tag ${props.size}`} onClick={props.onClick}>
+      <TagContent {...props} />
     </button>
   ) : (
-    <span className={`tag ${size}`}>
-      <span>{children}</span>
-      <TagEnd size={size} />
+    <span className={`tag ${props.size}`}>
+      <TagContent {...props} />
     </span>
   );
 };

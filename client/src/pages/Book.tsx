@@ -1,33 +1,37 @@
 import { useContext, useState, useEffect } from "react";
 import { useParams, Link, useLocation } from "react-router";
-import { BooksContext, HistoryContext } from "@/context";
+import { BooksContext, TagsContext, HistoryContext } from "@/context";
+import { Offcanvas } from "react-bootstrap";
 import { Tag, FloatBtn } from "@/components";
 
 import type { Book as BookType } from "@/types";
-// import { format } from "date-fns";
-// import { Offcanvas, Modal } from "react-bootstrap";
 
 const Book = () => {
   const id = useParams().id;
   const { pathname } = useLocation();
   // const navigate = useNavigate();
   // const [allTags, setAllTags] = useContext(TagsContext);
-  const [allBooks] = useContext(BooksContext);
+  const [allTags] = useContext(TagsContext);
+  const [allBooks, setAllBooks] = useContext(BooksContext);
   const [_, setHistory] = useContext(HistoryContext);
-  // const [showEdit, setShowEdit] = useState(false);
+  const [showTagger, setShowTagger] = useState(false);
+
   // const [showDuplicateError, setShowDuplicateError] = useState(false);
   // const [showConfirmation, setShowConfirmation] = useState(false);
 
   const [{ name, authors, tags }, setBook] = useState<BookType>({
+    id: Number(id),
+    description: "",
     name: "",
     authors: [],
     tags: [],
   });
 
   useEffect(() => {
-    const bookData = allBooks.find((_, i) => i === Number(id));
+    if (allBooks.length === 0) return;
+    const bookData = allBooks.find((b) => b.id === Number(id));
     if (bookData) setBook(bookData);
-  }, [allBooks, id]);
+  }, []);
 
   useEffect(() => {
     if (!name) return;
@@ -38,6 +42,21 @@ const Book = () => {
         : [...prev, { pathname, title: document.title }],
     );
   }, [name]);
+
+  useEffect(() => {
+    setAllBooks((prev) =>
+      prev.map((b) => (b.id === Number(id) ? { ...b, tags } : b)),
+    );
+  }, [tags]);
+
+  const toggleTag = (tagName: string) => {
+    setBook((prev) => ({
+      ...prev,
+      tags: prev.tags.includes(tagName)
+        ? prev.tags.filter((t) => t !== tagName)
+        : [...prev.tags, tagName],
+    }));
+  };
 
   if (!name) {
     return (
@@ -64,18 +83,45 @@ const Book = () => {
         <hr />
         <div>
           {tags?.length ? (
-            tags.map((t, i) => (
-              <Link to={`/tag/${i}`} key={i}>
-                <Tag>{t.name}</Tag>
-              </Link>
-            ))
+            <ul className="tags">
+              {tags.map((t, i) => (
+                <li key={i}>
+                  <Link to={`/tag/${i}`}>
+                    <Tag>{t}</Tag>
+                  </Link>
+                </li>
+              ))}
+            </ul>
           ) : (
             <em>No tags</em>
           )}
         </div>
-        <FloatBtn onClick={() => {}}>
-          <i className="bi bi-pencil-fill" />
+        <FloatBtn onClick={() => setShowTagger(true)}>
+          <i className="bi bi-tag-fill" />
         </FloatBtn>
+        <Offcanvas
+          show={showTagger}
+          onHide={() => setShowTagger(false)}
+          placement={"bottom"}
+        >
+          <Offcanvas.Header closeButton>
+            <Offcanvas.Title>TAG BOOK</Offcanvas.Title>
+          </Offcanvas.Header>
+          <Offcanvas.Body>
+            <ul className="tags">
+              {allTags.map((t, i) => (
+                <li key={i} className="d-inline">
+                  <Tag
+                    onClick={() => toggleTag(t.name)}
+                    color={tags?.includes(t.name) ? "secondary" : "dark"}
+                  >
+                    {t.name}
+                  </Tag>
+                </li>
+              ))}
+            </ul>
+          </Offcanvas.Body>
+        </Offcanvas>
       </main>
     </div>
   );

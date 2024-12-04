@@ -60,12 +60,10 @@ const App = () => {
       try {
         const { data: allBooks } = await axios.get("/api/books");
         setBooks(
-          allBooks.map((b: BookType) => ({ ...b, tags: [defaultTags[2]] })),
-        );
-        setTags(
-          tags.map((tag) =>
-            tag.type === "Borrowed" ? { ...tag, books: allBooks } : tag,
-          ),
+          allBooks.map((b: BookType) => ({
+            ...b,
+            tags: [defaultTags[2].name],
+          })),
         );
       } catch (_) {
         console.error("Error fetching /api/books");

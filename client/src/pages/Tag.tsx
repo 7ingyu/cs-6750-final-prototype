@@ -2,7 +2,7 @@ import { useContext, useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router";
 import { format } from "date-fns";
 import { Offcanvas, Modal } from "react-bootstrap";
-import { TagsContext, HistoryContext } from "@/context";
+import { BooksContext, TagsContext, HistoryContext } from "@/context";
 import { Book, FloatBtn, Tag as TagComponent } from "@/components";
 
 import type { Tag as TagType } from "@/types";
@@ -12,12 +12,13 @@ const Tag = () => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const [_, setHistory] = useContext(HistoryContext);
+  const [allBooks] = useContext(BooksContext);
   const [allTags, setAllTags] = useContext(TagsContext);
   const [showEdit, setShowEdit] = useState(false);
   const [showDuplicateError, setShowDuplicateError] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
 
-  const [{ name, books, smart, description, createdAt }, setBook] =
+  const [{ name, books, smart, description, createdAt }, setTag] =
     useState<TagType>({
       name: "",
       books: [],
@@ -27,7 +28,12 @@ const Tag = () => {
 
   useEffect(() => {
     const tagData = allTags.find((_, i) => i === Number(id));
-    if (tagData) setBook(tagData);
+    if (tagData) {
+      setTag({
+        ...tagData,
+        books: allBooks.filter((b) => b.tags.includes(tagData.name)),
+      });
+    }
   }, [allTags, id]);
 
   useEffect(() => {
