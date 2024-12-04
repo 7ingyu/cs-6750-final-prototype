@@ -96,7 +96,7 @@ const Home = () => {
         <h1>Tags</h1>
       </header>
       <main>
-        <div className="mt-2 mb-3 d-flex flex-wrap justify-content-between">
+        <div className="mt-4 mb-3 d-flex flex-wrap justify-content-between">
           <button
             className="btn btn-primary px-2 py-0 btn-lg mb-3"
             onClick={() => setShowFilter(!showFilter)}

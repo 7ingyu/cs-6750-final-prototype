@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router";
 import { format } from "date-fns";
-import { Offcanvas, Modal } from "react-bootstrap";
+import { Offcanvas, Modal, Spinner } from "react-bootstrap";
 import {
   LeadingActions,
   SwipeableList,
@@ -71,8 +71,10 @@ const Tag = () => {
 
   if (!name) {
     return (
-      <div>
-        <h1>Tag not found</h1>
+      <div className="h-100 w-100 d-flex justify-content-center align-items-center">
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
       </div>
     );
   }
@@ -140,7 +142,7 @@ const Tag = () => {
             <h1 className="fs-3 p-0 m-0">{name}</h1>
           </TagComponent>
         </div>
-        <div className="description my-2">
+        <div className="description mt-3 mb-2">
           {description || `Created on ${format(createdAt, "dd MMM yyyy")}`}
         </div>
         {smart ? (

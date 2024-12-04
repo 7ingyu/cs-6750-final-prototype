@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from "react";
 import { useParams, Link, useLocation } from "react-router";
 import { BooksContext, TagsContext, HistoryContext } from "@/context";
-import { Offcanvas } from "react-bootstrap";
+import { Offcanvas, Spinner } from "react-bootstrap";
 import { Tag, FloatBtn } from "@/components";
 
 import type { Book as BookType } from "@/types";
@@ -67,8 +67,10 @@ const Book = () => {
 
   if (!name) {
     return (
-      <div>
-        <h1>Book not found</h1>
+      <div className="h-100 w-100 d-flex justify-content-center align-items-center">
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
       </div>
     );
   }
