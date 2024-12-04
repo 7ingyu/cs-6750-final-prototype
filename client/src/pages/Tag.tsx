@@ -13,7 +13,7 @@ const Tag = () => {
   const [_, setHistory] = useContext(HistoryContext);
   const [allBooks, setAllBooks] = useContext(BooksContext);
   const [relevantBooks, setRelevantBooks] = useState<BookType[]>([]);
-  const [allTags] = useContext(TagsContext);
+  const [allTags, setAllTags] = useContext(TagsContext);
   const [showEdit, setShowEdit] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
@@ -105,9 +105,13 @@ const Tag = () => {
   };
 
   const handleSave = () => {
-    if (allTags.find((t) => t.name === name)) {
-      return;
-    }
+    setAllTags((prev) =>
+      prev.map((t, i) =>
+        i === Number(id)
+          ? { ...t, name, description, updatedAt: new Date() }
+          : t,
+      ),
+    );
     setShowEdit(false);
   };
 
@@ -171,7 +175,20 @@ const Tag = () => {
         <div className="description mt-3 mb-2">
           <input
             value={
-              description || `Created on ${format(createdAt, "dd MMM yyyy")}`
+              showEdit
+                ? description
+                : description ||
+                  `Created on ${format(createdAt, "dd MMM yyyy")}`
+            }
+            onChange={(e) =>
+              setTag({
+                name,
+                smart,
+                description: e.target.value,
+                createdAt,
+                size,
+                updatedAt: new Date(),
+              })
             }
             disabled={!showEdit}
           />
