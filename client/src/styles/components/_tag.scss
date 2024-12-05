@@ -34,6 +34,9 @@ span.tag {
       margin: 0;
       font-size: rfs-value(15px);
     }
+    input {
+      pointer-events: auto;
+    }
   }
   svg {
     width: rfs-value(15px);
