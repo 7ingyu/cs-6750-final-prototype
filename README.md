@@ -37,7 +37,7 @@
 - `cd client`
 - `yarn install`
 - `yarn run dev`
-- Open a browser window at the indicated url, usually [https://localhost:5432](https://localhost:5432)
+- Open a browser window at the indicated url, usually [https://localhost:5173](https://localhost:5173)
 - Frontend components are in the `src` folder. Try editing `App.tsx` to see changes reflected in the browser.
   - With hot module reloading, you should not need to refresh your browser window to see changes.
 
