@@ -5,7 +5,7 @@
 ### Team Members
 
 - [Chen, Ting-Yu](https://github.com/7ingyu)
-- Han, Wendy D
+- [Han, Wendy D](https://github.com/ChewyChewingston)
 - [Lacy, Kalika](https://github.com/kqlacy)
 - [Yee, Jennifer](https://github.com/chocolateleche)
 
