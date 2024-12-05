@@ -14,6 +14,7 @@ const Nav = () => {
   const id = Number(pathname.replace(/^\/tag\//, ""));
 
   const handleDelete = () => {
+    navigate("/");
     const newTags = allTags.toSpliced(Number(id), 1);
     setAllTags(newTags);
     setShowConfirmation(false);
@@ -24,10 +25,6 @@ const Nav = () => {
       })),
     );
   };
-
-  if (pathname.match(/^\/tag\//) && !allTags[id]) {
-    navigate("/");
-  }
 
   return (
     <nav className="">
